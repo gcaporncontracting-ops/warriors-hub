@@ -60,9 +60,12 @@
 
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:18px;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
     margin-top:20px;
+  }
+  @media (max-width:360px){
+    .grid{grid-template-columns:1fr;}
   }
   .card{
     display:block;text-decoration:none;color:#fff;
