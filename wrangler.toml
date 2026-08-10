@@ -1,5 +1,11 @@
 name = "warriors-hub"
+main = "src/worker.js"
 compatibility_date = "2026-08-08"
 
 [assets]
 directory = "./"
+binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "NOTICE_KV"
+id = "3422755a01514d2f884dc8e6db5e57ad"
