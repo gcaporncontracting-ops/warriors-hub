@@ -147,6 +147,10 @@
     font-family:'Anton', sans-serif;text-transform:uppercase;
     font-size:19px;margin:0 0 12px;color:#fff;letter-spacing:.01em;
   }
+  .notice-reset-note{
+    margin:-6px 0 14px;font-size:12px;color:rgba(255,255,255,.55);
+    font-family:'JetBrains Mono',monospace;letter-spacing:.02em;
+  }
   .notice-list{display:flex;flex-direction:column;gap:10px;}
   .notice-empty{margin:0;font-size:13.5px;color:rgba(255,255,255,.6);font-style:italic;}
   .notice-item{
@@ -294,6 +298,7 @@
 
   <div class="notice-board">
     <h2 class="notice-title">Notice Board</h2>
+    <p class="notice-reset-note">Notice board resets every Wednesday and Friday.</p>
     <div id="noticeList" class="notice-list">
       <p class="notice-empty">No one's flagged missing training yet.</p>
     </div>
@@ -329,7 +334,26 @@
 </script>
 <script>
   // ---------- Notice Board: "Can't make training" ----------
-  const NOTICE_KEY = 'cant_make_training';
+  // The board "resets" every Wednesday and Friday without any cron job
+  // or deletion: notices are stored under a key that includes the date
+  // of the most recent Wednesday/Friday boundary. Once that boundary
+  // passes, a brand new (empty) key comes into play automatically.
+  function currentNoticePeriodKey(){
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    for (let i = 0; i < 7; i++){
+      const day = d.getDay(); // 0=Sun ... 3=Wed ... 5=Fri
+      if (day === 3 || day === 5){
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${dd}`;
+      }
+      d.setDate(d.getDate() - 1);
+    }
+    return 'fallback';
+  }
+  const NOTICE_KEY = `cant_make_training:${currentNoticePeriodKey()}`;
 
   async function loadNotices(){
     try{
