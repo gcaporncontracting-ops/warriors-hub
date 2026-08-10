@@ -106,6 +106,56 @@
     background:#d8d2bd;color:#6b6455;padding:3px 8px;border-radius:999px;
   }
 
+  .ctt-card{cursor:default;}
+  .ctt-row{margin-top:14px;}
+  .ctt-label{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;
+  }
+  .ctt-row input{
+    width:100%;font-family:'Work Sans',sans-serif;font-size:15px;
+    padding:10px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;
+  }
+  .ctt-row input::placeholder{color:rgba(255,255,255,.45);}
+  .ctt-row input:focus{outline:none;border-color:var(--blue);}
+  .ctt-submit{
+    width:100%;margin-top:12px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--red);color:#fff;border:none;border-radius:8px;
+    padding:11px 16px;font-size:13px;cursor:pointer;
+    box-shadow:0 5px 0 #9c1c1c;transition:transform .08s, box-shadow .08s;
+  }
+  .ctt-submit:active{transform:translateY(3px);box-shadow:0 2px 0 #9c1c1c;}
+  .ctt-submit:disabled{opacity:.55;cursor:not-allowed;}
+  .ctt-status{margin:10px 0 0;font-size:12.5px;min-height:16px;}
+  .ctt-status.ok{color:#7fe0a3;}
+  .ctt-status.err{color:#ff8a8a;}
+
+  .notice-board{
+    max-width:920px;margin:26px auto 0;
+    background:rgba(6,10,24,.78);
+    border:2px solid var(--gold);
+    border-radius:16px;
+    box-shadow:0 0 18px rgba(242,177,52,.35), 0 10px 24px rgba(0,0,0,.5);
+    padding:20px 22px;
+  }
+  .notice-title{
+    font-family:'Anton', sans-serif;text-transform:uppercase;
+    font-size:19px;margin:0 0 12px;color:#fff;letter-spacing:.01em;
+  }
+  .notice-list{display:flex;flex-direction:column;gap:10px;}
+  .notice-empty{margin:0;font-size:13.5px;color:rgba(255,255,255,.6);font-style:italic;}
+  .notice-item{
+    display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;
+    font-size:14px;color:#fff;
+  }
+  .notice-item .notice-name{font-weight:700;}
+  .notice-item .notice-date{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.55);flex:none;
+  }
+
   .card.grade-picker{cursor:pointer;position:relative;}
   .card.grade-picker .chevron{
     transition:transform .15s;
@@ -179,13 +229,6 @@
   </header>
 
   <div class="grid">
-    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
-      <img class="icon-img" src="/icon-fines.png" alt="">
-      <span class="chevron-arrow">›</span>
-      <h2>Fines Wall</h2>
-      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
-    </a>
-
     <div class="card grade-picker" id="gradePickerCard">
       <img class="icon-img" src="/icon-vote.png" alt="">
       <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
@@ -199,6 +242,13 @@
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
       </div>
     </div>
+
+    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
+      <img class="icon-img" src="/icon-fines.png" alt="">
+      <span class="chevron-arrow">›</span>
+      <h2>Fines Wall</h2>
+      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
+    </a>
 
     <a class="card" href="/strava.html">
       <span class="icon" style="font-size:30px;display:block;margin-bottom:12px;">🏃</span>
@@ -220,12 +270,30 @@
       </div>
     </div>
 
+    <div class="card ctt-card" id="cantMakeTrainingCard">
+      <h2>Can't make training?</h2>
+      <p>Let the team know you'll be missing training.</p>
+      <div class="ctt-row">
+        <label for="cttName" class="ctt-label">Name</label>
+        <input type="text" id="cttName" maxlength="40" placeholder="Your name">
+      </div>
+      <button type="button" class="ctt-submit" id="cttSubmit">Post to Notice Board</button>
+      <p class="ctt-status" id="cttStatus"></p>
+    </div>
+
     <a class="card" href="https://www.playhq.com/afl/register/7be286" target="_blank" rel="noopener">
       <img class="icon-img" src="/icon-register.png" alt="">
       <span class="chevron-arrow">›</span>
       <h2>Players Register</h2>
       <p>Sign up or re-register for the season through PlayHQ.</p>
     </a>
+  </div>
+
+  <div class="notice-board">
+    <h2 class="notice-title">Notice Board</h2>
+    <div id="noticeList" class="notice-list">
+      <p class="notice-empty">No one's flagged missing training yet.</p>
+    </div>
   </div>
 
   <footer class="foot">
@@ -255,6 +323,83 @@
 
   setupGradePicker('fixturesPickerCard', 'fixturesOptions', 'fixturesChevron');
   setupGradePicker('gradePickerCard', 'gradeOptions', 'gradeChevron');
+</script>
+<script>
+  // ---------- Notice Board: "Can't make training" ----------
+  const NOTICE_KEY = 'cant_make_training';
+
+  async function loadNotices(){
+    try{
+      const res = await fetch(`/api/store?key=${NOTICE_KEY}`, { cache: 'no-store' });
+      const val = await res.json();
+      return Array.isArray(val) ? val : [];
+    }catch(e){ return []; }
+  }
+  async function saveNotices(list){
+    await fetch(`/api/store?key=${NOTICE_KEY}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(list),
+    });
+  }
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function friendlyDate(ts){
+    return new Date(ts).toLocaleDateString(undefined, {weekday:'short', day:'numeric', month:'short'});
+  }
+
+  async function renderNoticeBoard(){
+    const list = await loadNotices();
+    const noticeList = document.getElementById('noticeList');
+    // Keep only the last 20, most recent first — this is a lightweight
+    // rolling notice, not a permanent record.
+    const recent = list.slice(-20).reverse();
+    if (recent.length === 0){
+      noticeList.innerHTML = `<p class="notice-empty">No one's flagged missing training yet.</p>`;
+      return;
+    }
+    noticeList.innerHTML = recent.map(n => `
+      <div class="notice-item">
+        <span class="notice-name">${escapeHtml(n.name)} can't make training</span>
+        <span class="notice-date">${friendlyDate(n.ts)}</span>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('cttSubmit').addEventListener('click', async () => {
+    const input = document.getElementById('cttName');
+    const status = document.getElementById('cttStatus');
+    const btn = document.getElementById('cttSubmit');
+    const name = input.value.trim();
+
+    if (!name){
+      status.textContent = 'Enter your name first.';
+      status.className = 'ctt-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Posting...';
+    status.className = 'ctt-status';
+
+    try{
+      const list = await loadNotices();
+      list.push({ name, ts: Date.now() });
+      await saveNotices(list);
+      input.value = '';
+      status.textContent = 'Posted to the Notice Board.';
+      status.className = 'ctt-status ok';
+      renderNoticeBoard();
+    }catch(e){
+      status.textContent = 'Could not post — try again.';
+      status.className = 'ctt-status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  renderNoticeBoard();
 </script>
 <script>
   if ('serviceWorker' in navigator) {
