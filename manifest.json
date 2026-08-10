@@ -1,0 +1,14 @@
+{
+  "name": "Cockburn Lakes Warriors Members Hub",
+  "short_name": "Warriors Hub",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1c4d",
+  "theme_color": "#0b1c4d",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
