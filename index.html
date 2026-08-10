@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockburn Lakes Warriors — Members Hub</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1c4d">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Warriors Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#132a6e;
+    --navy-deep:#0b1c4d;
+    --red:#d62828;
+    --blue:#1d4fd8;
+    --gold:#f2b134;
+    --ink:#14161c;
+    --paper:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background-color:#050810;
+    background-image:url('/wallpaper.jpg');
+    background-size:cover;
+    background-position:top center;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  header.top{
+    text-align:center;
+    padding:10px 0 20px;
+    color:#fff;
+  }
+  .hero-banner{
+    width:100%;
+    max-width:480px;
+    margin:0 auto;
+  }
+  .hero-banner img{
+    width:100%;
+    display:block;
+    border-radius:10px;
+  }
+  .subtitle{
+    max-width:520px;margin:14px auto 0;
+    font-size:15px;line-height:1.55;
+    color:rgba(255,255,255,.82);
+    padding:0 16px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+    margin-top:20px;
+  }
+  .card{
+    display:block;text-decoration:none;color:#fff;
+    background:rgba(6,10,24,.78);
+    border-radius:16px;
+    padding:22px 20px 22px 22px;
+    border:2px solid var(--blue);
+    box-shadow:0 0 18px rgba(29,79,216,.45), 0 10px 24px rgba(0,0,0,.5);
+    transition:transform .12s, box-shadow .12s;
+    position:relative;
+    cursor:pointer;
+  }
+  .card:hover{transform:translateY(-3px);}
+  .card:nth-child(odd){
+    border-color:var(--red);
+    box-shadow:0 0 18px rgba(214,40,40,.45), 0 10px 24px rgba(0,0,0,.5);
+  }
+  .card.disabled{
+    pointer-events:none;opacity:.6;filter:grayscale(.2);
+  }
+  .card .icon-img{width:44px;height:auto;margin-bottom:12px;display:block;}
+
+  .card h2{
+    font-family:'Anton', sans-serif;text-transform:uppercase;
+    font-size:19px;margin:0 0 6px;color:#fff;letter-spacing:.01em;
+  }
+  .card p{margin:0;font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.72);padding-right:22px;}
+  .card .pin-note{
+    margin-top:8px;font-size:12px;color:var(--gold);
+    font-family:'JetBrains Mono',monospace;letter-spacing:.02em;
+  }
+  .card .chevron-arrow{
+    position:absolute;top:22px;right:20px;
+    font-size:20px;font-weight:700;
+  }
+  .card:nth-child(odd) .chevron-arrow{color:var(--red);}
+  .card:nth-child(even) .chevron-arrow{color:var(--blue);}
+  .soon-tag{
+    position:absolute;top:16px;right:16px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+    background:#d8d2bd;color:#6b6455;padding:3px 8px;border-radius:999px;
+  }
+
+  .card.grade-picker{cursor:pointer;position:relative;}
+  .card.grade-picker .chevron{
+    transition:transform .15s;
+  }
+  .card.grade-picker.open .chevron{transform:rotate(180deg);}
+  .grade-options{
+    display:flex;flex-direction:column;gap:8px;margin-top:14px;
+  }
+  .grade-options[hidden]{display:none;}
+  .grade-options a{
+    display:block;text-decoration:none;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+    letter-spacing:.04em;text-transform:uppercase;
+    color:#fff;
+    border:none;border-radius:7px;
+    padding:11px 12px;
+    transition:transform .1s, box-shadow .1s;
+  }
+  .grade-options a:nth-child(odd){background:var(--red);box-shadow:0 4px 0 #9c1c1c;}
+  .grade-options a:nth-child(even){background:var(--blue);box-shadow:0 4px 0 #12318f;}
+  .grade-options a:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3);}
+
+  footer.foot{
+    text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-top:40px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .install-splash{
+    position:fixed;inset:0;z-index:100;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--navy-deep);
+    padding:32px;text-align:center;
+  }
+  .install-splash[hidden]{display:none;}
+  .install-logo{width:min(60vw,220px);margin-bottom:22px;}
+  .install-title{
+    font-family:'Anton',sans-serif;text-transform:uppercase;
+    font-size:clamp(28px,7vw,44px);color:#fff;margin:0 0 10px;
+  }
+  .install-sub{
+    color:rgba(255,255,255,.8);font-size:15px;line-height:1.5;
+    max-width:320px;margin:0 0 28px;
+  }
+  .install-btn{
+    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--red);color:#fff;border:none;border-radius:8px;
+    padding:14px 30px;font-size:14px;cursor:pointer;
+    box-shadow:0 6px 0 #9c1c1c;
+  }
+  .install-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #9c1c1c;}
+  .install-later{
+    margin-top:16px;background:none;border:none;
+    color:rgba(255,255,255,.6);font-family:'Work Sans',sans-serif;font-size:13px;
+    text-decoration:underline;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="install-splash" id="installSplash">
+  <img src="/crest.png" alt="Cockburn Lakes Warriors crest" class="install-logo">
+  <p class="install-title">Warriors Hub</p>
+  <p class="install-sub" id="installSubtext">Add this to your home screen for one-tap access to fines, fixtures, and voting.</p>
+  <button type="button" class="install-btn" id="installBtn">Install App</button>
+  <button type="button" class="install-later" id="installLater">Maybe later</button>
+</div>
+<div class="wrap">
+  <header class="top">
+    <div class="hero-banner">
+      <img src="/hero.jpg" alt="Cockburn Lakes F.C. Warriors — Player Hub. Everything you need, all in one place.">
+    </div>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
+      <img class="icon-img" src="/icon-fines.png" alt="">
+      <span class="chevron-arrow">›</span>
+      <h2>Fines Wall</h2>
+      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
+    </a>
+
+    <div class="card grade-picker" id="gradePickerCard">
+      <img class="icon-img" src="/icon-vote.png" alt="">
+      <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
+      <h2>Player's Player</h2>
+      <p>Make your vote here.</p>
+      <p class="pin-note">Default PIN while testing: <strong>0000</strong></p>
+      <div class="grade-options" id="gradeOptions" hidden>
+        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
+        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
+        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/colts">Colts</a>
+        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
+      </div>
+    </div>
+
+    <div class="card grade-picker" id="fixturesPickerCard">
+      <img class="icon-img" src="/icon-fixtures.png" alt="">
+      <span class="chevron chevron-arrow" id="fixturesChevron">▾</span>
+      <h2>Fixtures</h2>
+      <p>Upcoming fixtures, training times, and venue details.</p>
+      <div class="grade-options" id="fixturesOptions" hidden>
+        <a href="https://www.playhq.com/afl/org/perth-football-league/perth-football-league-2026/budget-car-and-truck-rental-b-grade-men/5d8b69aa" target="_blank" rel="noopener">League</a>
+        <a href="https://www.playhq.com/afl/org/perth-football-league/2026/budget-car-and-truck-rental-b-reserves-men/5d8a608a" target="_blank" rel="noopener">Reserves</a>
+        <a href="https://www.playhq.com/afl/org/perth-football-league/2026/egt-drew-banfield-colts/9c044820" target="_blank" rel="noopener">Colts</a>
+        <a href="https://www.playhq.com/afl/org/perth-football-league/2026/budget-car-and-truck-rental-e2-south-men/3bd3820f" target="_blank" rel="noopener">Thirds</a>
+      </div>
+    </div>
+
+    <a class="card" href="https://www.playhq.com/afl/register/7be286" target="_blank" rel="noopener">
+      <img class="icon-img" src="/icon-register.png" alt="">
+      <span class="chevron-arrow">›</span>
+      <h2>Players Register</h2>
+      <p>Sign up or re-register for the season through PlayHQ.</p>
+    </a>
+
+    <a class="card" href="/strava.html">
+      <span class="icon" style="font-size:30px;display:block;margin-bottom:12px;">🏃</span>
+      <span class="chevron-arrow">›</span>
+      <h2>Strava</h2>
+      <p>See recent club runs and join the leaderboard.</p>
+    </a>
+  </div>
+
+  <footer class="foot">
+    <img src="/footer.jpg" alt="Accountability, Respect, Mateship" style="width:100%;display:block;">
+  </footer>
+</div>
+
+<script>
+  // Reusable pattern: tap anywhere on a .grade-picker card to expand/collapse
+  // its options, unless the tap was on one of the option links themselves.
+  function setupGradePicker(cardId, optionsId, chevronId){
+    const card = document.getElementById(cardId);
+    const options = document.getElementById(optionsId);
+    const chevron = document.getElementById(chevronId);
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // let the link navigate normally
+      const isHidden = options.hasAttribute('hidden');
+      if (isHidden) {
+        options.removeAttribute('hidden');
+        card.classList.add('open');
+      } else {
+        options.setAttribute('hidden', '');
+        card.classList.remove('open');
+      }
+    });
+  }
+
+  setupGradePicker('fixturesPickerCard', 'fixturesOptions', 'fixturesChevron');
+  setupGradePicker('gradePickerCard', 'gradeOptions', 'gradeChevron');
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+  }
+
+  // ---------- install splash ----------
+  (function(){
+    const splash = document.getElementById('installSplash');
+    const installBtn = document.getElementById('installBtn');
+    const laterBtn = document.getElementById('installLater');
+    const subtext = document.getElementById('installSubtext');
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+    const dismissed = localStorage.getItem('installSplashDismissed') === 'yes';
+
+    if (isStandalone || dismissed || !isMobile) {
+      splash.setAttribute('hidden', '');
+    } else {
+      let deferredPrompt = null;
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+      });
+
+      if (isIOS) {
+        subtext.textContent = 'Tap the Share icon below, then "Add to Home Screen" for one-tap access.';
+        installBtn.textContent = 'Got it';
+        installBtn.addEventListener('click', () => {
+          localStorage.setItem('installSplashDismissed', 'yes');
+          splash.setAttribute('hidden', '');
+        });
+      } else {
+        installBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+          } else {
+            subtext.textContent = 'Open your browser menu and tap "Install app" or "Add to Home Screen".';
+            return;
+          }
+          localStorage.setItem('installSplashDismissed', 'yes');
+          splash.setAttribute('hidden', '');
+        });
+      }
+
+      laterBtn.addEventListener('click', () => {
+        localStorage.setItem('installSplashDismissed', 'yes');
+        splash.setAttribute('hidden', '');
+      });
+    }
+  })();
+</script>
+</body>
+</html>
