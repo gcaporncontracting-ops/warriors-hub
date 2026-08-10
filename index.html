@@ -138,6 +138,16 @@
   .ctt-status.ok{color:#7fe0a3;}
   .ctt-status.err{color:#ff8a8a;}
 
+  .suggestion-card{cursor:default;}
+  .suggestion-card textarea{
+    width:100%;font-family:'Work Sans',sans-serif;font-size:14px;
+    padding:9px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;resize:vertical;margin-top:10px;
+  }
+  .suggestion-card textarea::placeholder{color:rgba(255,255,255,.45);}
+  .suggestion-card textarea:focus{outline:none;border-color:var(--red);}
+  .suggestion-card .ctt-submit{width:100%;margin-top:10px;}
+
   .notice-board{
     max-width:920px;margin:26px auto 0;
     background:rgba(6,10,24,.78);
@@ -295,6 +305,14 @@
       <h2>Players Register</h2>
       <p>Sign up or re-register for the season through PlayHQ.</p>
     </a>
+
+    <div class="card suggestion-card" id="suggestionCard">
+      <h2>Make a suggestion</h2>
+      <p>Got an idea to improve the club? No name needed.</p>
+      <textarea id="suggestionText" maxlength="500" rows="3" placeholder="Your suggestion..."></textarea>
+      <button type="button" class="ctt-submit" id="suggestionSubmit">Submit</button>
+      <p class="ctt-status" id="suggestionStatus"></p>
+    </div>
   </div>
 
   <div class="notice-board">
@@ -428,6 +446,51 @@
   });
 
   renderNoticeBoard();
+
+  // ---------- Make a suggestion (emails gcaporncontracting@gmail.com via Web3Forms) ----------
+  document.getElementById('suggestionSubmit').addEventListener('click', async () => {
+    const textEl = document.getElementById('suggestionText');
+    const status = document.getElementById('suggestionStatus');
+    const btn = document.getElementById('suggestionSubmit');
+    const value = textEl.value.trim();
+
+    if (!value){
+      status.textContent = 'Write a suggestion first.';
+      status.className = 'ctt-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Sending...';
+    status.className = 'ctt-status';
+
+    try{
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: 'a59f79b9-cb63-4cc8-ab40-7465fd609f14',
+          subject: 'New suggestion — Warriors Hub',
+          from_name: 'Warriors Hub Suggestion Box',
+          message: value,
+        }),
+      });
+      const data = await res.json();
+      if (data.success){
+        textEl.value = '';
+        status.textContent = 'Sent — thanks!';
+        status.className = 'ctt-status ok';
+      } else {
+        status.textContent = 'Could not send — try again.';
+        status.className = 'ctt-status err';
+      }
+    }catch(e){
+      status.textContent = 'Network error — try again.';
+      status.className = 'ctt-status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
 </script>
 <script>
   if ('serviceWorker' in navigator) {
