@@ -230,6 +230,55 @@
     color:rgba(255,255,255,.6);font-family:'Work Sans',sans-serif;font-size:13px;
     text-decoration:underline;cursor:pointer;
   }
+
+  .tutorial-splash{
+    position:fixed;inset:0;z-index:99;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(5,8,16,.94);
+    padding:28px 24px;text-align:center;
+  }
+  .tutorial-splash[hidden]{display:none;}
+  .tutorial-skip{
+    position:absolute;top:18px;right:18px;
+    background:none;border:none;color:rgba(255,255,255,.55);
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+    cursor:pointer;padding:6px;
+  }
+  .tutorial-card{max-width:320px;}
+  .tutorial-icon-wrap{
+    width:84px;height:84px;margin:0 auto 20px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);border-radius:50%;
+    border:2px solid var(--blue);
+  }
+  .tutorial-icon-wrap img{width:42px;height:auto;}
+  .tutorial-icon-wrap.emoji{font-size:38px;}
+  .tutorial-step-title{
+    font-family:'Anton',sans-serif;text-transform:uppercase;
+    font-size:24px;color:#fff;margin:0 0 12px;letter-spacing:.01em;
+  }
+  .tutorial-step-text{
+    color:rgba(255,255,255,.82);font-size:15px;line-height:1.55;margin:0 0 26px;
+  }
+  .tutorial-dots{display:flex;justify-content:center;gap:8px;margin-bottom:22px;}
+  .tutorial-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.28);transition:background .15s,width .15s;}
+  .tutorial-dot.active{background:var(--red);width:20px;border-radius:4px;}
+  .tutorial-nav{display:flex;gap:10px;justify-content:center;}
+  .tutorial-next{
+    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--red);color:#fff;border:none;border-radius:8px;
+    padding:13px 34px;font-size:14px;cursor:pointer;
+    box-shadow:0 6px 0 #9c1c1c;
+  }
+  .tutorial-next:active{transform:translateY(3px);box-shadow:0 3px 0 #9c1c1c;}
+
+  .tutorial-help-btn{
+    position:fixed;bottom:20px;right:20px;z-index:50;
+    width:42px;height:42px;border-radius:50%;
+    background:var(--navy);border:2px solid var(--blue);color:#fff;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);cursor:pointer;
+  }
 </style>
 </head>
 <body>
@@ -241,6 +290,21 @@
   <button type="button" class="install-btn" id="installBtn">Install App</button>
   <button type="button" class="install-later" id="installLater">Maybe later</button>
 </div>
+
+<div class="tutorial-splash" id="tutorialSplash" hidden>
+  <button type="button" class="tutorial-skip" id="tutorialSkip">Skip</button>
+  <div class="tutorial-card">
+    <div class="tutorial-icon-wrap" id="tutorialIconWrap"></div>
+    <h2 class="tutorial-step-title" id="tutorialTitle"></h2>
+    <p class="tutorial-step-text" id="tutorialText"></p>
+    <div class="tutorial-dots" id="tutorialDots"></div>
+    <div class="tutorial-nav">
+      <button type="button" class="tutorial-next" id="tutorialNext">Next</button>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="tutorial-help-btn" id="tutorialHelpBtn" title="How this works">?</button>
 <div class="wrap">
   <header class="top">
     <div class="hero-banner">
@@ -545,6 +609,82 @@
         localStorage.setItem('installSplashDismissed', 'yes');
         splash.setAttribute('hidden', '');
       });
+    }
+  })();
+</script>
+<script>
+  // ---------- Quick tutorial: short, skippable, tap-through ----------
+  const tutorialSteps = [
+    { icon: '/crest.png', title: 'Welcome!', text: 'One hub for fines, votes, fixtures and more. Quick 20-second tour.' },
+    { icon: '/icon-fines.png', title: 'Fines Wall', text: 'Nominate a teammate, see the wall, check who owes what.' },
+    { icon: '/icon-vote.png', title: "Player's Player", text: 'Vote each week. PIN is 0000 while testing.' },
+    { emoji: '🙋', title: "Can't Make Training?", text: 'Post your name — it shows on the Notice Board below.' },
+    { icon: '/icon-fixtures.png', title: 'Fixtures & Register', text: 'Fixtures, PlayHQ registration, and Strava — one tap away.' },
+    { emoji: '💡', title: 'Got an idea?', text: 'Suggest anything for the hub — no name required.' },
+  ];
+
+  let tutorialIndex = 0;
+
+  function renderTutorialStep(){
+    const step = tutorialSteps[tutorialIndex];
+    const iconWrap = document.getElementById('tutorialIconWrap');
+    if (step.icon){
+      iconWrap.classList.remove('emoji');
+      iconWrap.innerHTML = `<img src="${step.icon}" alt="">`;
+    } else {
+      iconWrap.classList.add('emoji');
+      iconWrap.innerHTML = step.emoji;
+    }
+    document.getElementById('tutorialTitle').textContent = step.title;
+    document.getElementById('tutorialText').textContent = step.text;
+
+    document.getElementById('tutorialDots').innerHTML = tutorialSteps.map((_, i) =>
+      `<span class="tutorial-dot${i === tutorialIndex ? ' active' : ''}"></span>`
+    ).join('');
+
+    document.getElementById('tutorialNext').textContent =
+      (tutorialIndex === tutorialSteps.length - 1) ? "Got it!" : 'Next';
+  }
+
+  function showTutorial(){
+    tutorialIndex = 0;
+    renderTutorialStep();
+    document.getElementById('tutorialSplash').removeAttribute('hidden');
+  }
+  function closeTutorial(){
+    document.getElementById('tutorialSplash').setAttribute('hidden', '');
+    localStorage.setItem('hubTutorialSeen', 'yes');
+  }
+
+  document.getElementById('tutorialNext').addEventListener('click', () => {
+    if (tutorialIndex < tutorialSteps.length - 1){
+      tutorialIndex++;
+      renderTutorialStep();
+    } else {
+      closeTutorial();
+    }
+  });
+  document.getElementById('tutorialSkip').addEventListener('click', closeTutorial);
+  document.getElementById('tutorialHelpBtn').addEventListener('click', showTutorial);
+
+  // Auto-show once for first-time visitors. If the install-app splash
+  // is currently showing, wait for it to be dismissed first so the two
+  // overlays never stack on top of each other.
+  (function(){
+    if (localStorage.getItem('hubTutorialSeen') === 'yes') return;
+
+    const installSplash = document.getElementById('installSplash');
+
+    if (installSplash.hasAttribute('hidden')){
+      setTimeout(showTutorial, 500);
+    } else {
+      const observer = new MutationObserver(() => {
+        if (installSplash.hasAttribute('hidden')){
+          observer.disconnect();
+          setTimeout(showTutorial, 300);
+        }
+      });
+      observer.observe(installSplash, { attributes: true, attributeFilter: ['hidden'] });
     }
   })();
 </script>
