@@ -110,6 +110,7 @@
   }
 
   .ctt-card{cursor:default;}
+  .ctt-standalone{margin-top:20px;}
   .ctt-row{display:flex;gap:8px;margin-top:12px;align-items:center;}
   .ctt-row input{
     flex:1 1 auto;min-width:0;
@@ -232,6 +233,15 @@
     </div>
   </header>
 
+  <div class="card ctt-card ctt-standalone" id="cantMakeTrainingCard">
+    <h2>Can't make training?</h2>
+    <div class="ctt-row">
+      <input type="text" id="cttName" maxlength="40" placeholder="Your name">
+      <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
+    </div>
+    <p class="ctt-status" id="cttStatus"></p>
+  </div>
+
   <div class="grid">
     <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="/icon-fines.png" alt="">
@@ -252,15 +262,6 @@
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/colts">Colts</a>
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
       </div>
-    </div>
-
-    <div class="card ctt-card" id="cantMakeTrainingCard">
-      <h2>Can't make training?</h2>
-      <div class="ctt-row">
-        <input type="text" id="cttName" maxlength="40" placeholder="Your name">
-        <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
-      </div>
-      <p class="ctt-status" id="cttStatus"></p>
     </div>
 
     <a class="card" href="/strava.html">
