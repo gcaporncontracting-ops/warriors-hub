@@ -71,7 +71,7 @@
     display:block;text-decoration:none;color:#fff;
     background:rgba(6,10,24,.78);
     border-radius:16px;
-    padding:22px 20px 22px 22px;
+    padding:15px 20px 15px 22px;
     border:2px solid var(--blue);
     box-shadow:0 0 18px rgba(29,79,216,.45), 0 10px 24px rgba(0,0,0,.5);
     transition:transform .12s, box-shadow .12s;
@@ -86,7 +86,7 @@
   .card.disabled{
     pointer-events:none;opacity:.6;filter:grayscale(.2);
   }
-  .card .icon-img{width:44px;height:auto;margin-bottom:12px;display:block;}
+  .card .icon-img{width:38px;height:auto;margin-bottom:8px;display:block;}
 
   .card h2{
     font-family:'Anton', sans-serif;text-transform:uppercase;
@@ -98,7 +98,7 @@
     font-family:'JetBrains Mono',monospace;letter-spacing:.02em;
   }
   .card .chevron-arrow{
-    position:absolute;top:22px;right:20px;
+    position:absolute;top:15px;right:20px;
     font-size:20px;font-weight:700;
   }
   .card:nth-child(odd) .chevron-arrow{color:var(--red);}
@@ -232,6 +232,13 @@
   </header>
 
   <div class="grid">
+    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
+      <img class="icon-img" src="/icon-fines.png" alt="">
+      <span class="chevron-arrow">›</span>
+      <h2>Fines Wall</h2>
+      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
+    </a>
+
     <div class="card grade-picker" id="gradePickerCard">
       <img class="icon-img" src="/icon-vote.png" alt="">
       <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
@@ -246,12 +253,16 @@
       </div>
     </div>
 
-    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
-      <img class="icon-img" src="/icon-fines.png" alt="">
-      <span class="chevron-arrow">›</span>
-      <h2>Fines Wall</h2>
-      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
-    </a>
+    <div class="card ctt-card" id="cantMakeTrainingCard">
+      <h2>Can't make training?</h2>
+      <p>Let the team know you'll be missing training.</p>
+      <div class="ctt-row">
+        <label for="cttName" class="ctt-label">Name</label>
+        <input type="text" id="cttName" maxlength="40" placeholder="Your name">
+      </div>
+      <button type="button" class="ctt-submit" id="cttSubmit">Post to Notice Board</button>
+      <p class="ctt-status" id="cttStatus"></p>
+    </div>
 
     <a class="card" href="/strava.html">
       <span class="icon" style="font-size:30px;display:block;margin-bottom:12px;">🏃</span>
@@ -264,24 +275,13 @@
       <img class="icon-img" src="/icon-fixtures.png" alt="">
       <span class="chevron chevron-arrow" id="fixturesChevron">▾</span>
       <h2>Fixtures</h2>
-      <p>Upcoming fixtures, training times, and venue details.</p>
+      <p>Upcoming fixtures and venue details.</p>
       <div class="grade-options" id="fixturesOptions" hidden>
         <a href="https://www.playhq.com/afl/org/perth-football-league/perth-football-league-2026/budget-car-and-truck-rental-b-grade-men/5d8b69aa" target="_blank" rel="noopener">League</a>
         <a href="https://www.playhq.com/afl/org/perth-football-league/2026/budget-car-and-truck-rental-b-reserves-men/5d8a608a" target="_blank" rel="noopener">Reserves</a>
         <a href="https://www.playhq.com/afl/org/perth-football-league/2026/egt-drew-banfield-colts/9c044820" target="_blank" rel="noopener">Colts</a>
         <a href="https://www.playhq.com/afl/org/perth-football-league/2026/budget-car-and-truck-rental-e2-south-men/3bd3820f" target="_blank" rel="noopener">Thirds</a>
       </div>
-    </div>
-
-    <div class="card ctt-card" id="cantMakeTrainingCard">
-      <h2>Can't make training?</h2>
-      <p>Let the team know you'll be missing training.</p>
-      <div class="ctt-row">
-        <label for="cttName" class="ctt-label">Name</label>
-        <input type="text" id="cttName" maxlength="40" placeholder="Your name">
-      </div>
-      <button type="button" class="ctt-submit" id="cttSubmit">Post to Notice Board</button>
-      <p class="ctt-status" id="cttStatus"></p>
     </div>
 
     <a class="card" href="https://www.playhq.com/afl/register/7be286" target="_blank" rel="noopener">
