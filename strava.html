@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockburn Lakes Warriors — Strava</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1c4d">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Warriors Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#132a6e;
+    --navy-deep:#0b1c4d;
+    --red:#d62828;
+    --blue:#1d4fd8;
+    --ink:#14161c;
+    --paper:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background-color:#050810;
+    background-image:url('/wallpaper.jpg');
+    background-size:cover;
+    background-position:top center;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px 80px;}
+  header.top{
+    text-align:center;
+    padding:38px 16px 22px;
+    color:#fff;
+    position:relative;
+  }
+  .home-link{
+    position:absolute;top:18px;left:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;
+    color:#fff;text-decoration:none;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
+    padding:8px 14px;border-radius:999px;
+    transition:background .15s;
+  }
+  .home-link:hover{background:rgba(255,255,255,.22);}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--red);
+    margin:0 0 10px;
+  }
+  h1.title{
+    font-family:'Anton', sans-serif;
+    text-transform:uppercase;
+    font-weight:400;
+    font-size:clamp(30px,7vw,48px);
+    line-height:.95;
+    margin:0;
+    color:#fff;
+  }
+  .subtitle{
+    max-width:480px;margin:14px auto 0;
+    font-size:15px;line-height:1.55;
+    color:rgba(255,255,255,.8);
+  }
+  .widget-card{
+    background:rgba(6,10,24,.78);
+    border:2px solid var(--blue);
+    border-radius:16px;
+    box-shadow:0 0 18px rgba(29,79,216,.4), 0 10px 24px rgba(0,0,0,.5);
+    padding:20px;
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+    overflow-x:auto;
+  }
+  .widget-card iframe{
+    border-radius:8px;
+    max-width:100%;
+  }
+  .cta-row{
+    text-align:center;margin-top:22px;
+  }
+  .cta-btn{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--red);color:#fff;text-decoration:none;
+    border-radius:8px;
+    padding:13px 26px;font-size:13.5px;
+    box-shadow:0 6px 0 #9c1c1c;
+  }
+  .cta-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #9c1c1c;}
+  footer.foot{
+    text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-top:30px;
+    font-family:'JetBrains Mono',monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a href="/" class="home-link">← Home</a>
+    <p class="eyebrow">Cockburn Lakes F.C.</p>
+    <h1 class="title">CLFC Running</h1>
+    <p class="subtitle">Recent runs and rides from the club. Join up on Strava to get your kilometres on the board.</p>
+  </header>
+
+  <div class="widget-card">
+    <iframe allowtransparency="true" frameborder="0" height="454" scrolling="no" src="https://www.strava.com/clubs/764279/latest-rides/1d0ab0a7699dd2679fbd1b0d94d645fcab05418c?show_rides=true" width="300"></iframe>
+  </div>
+
+  <div class="cta-row">
+    <a class="cta-btn" href="https://www.strava.com/clubs/764279" target="_blank" rel="noopener">Join CLFC Running on Strava</a>
+  </div>
+
+  <footer class="foot">Cockburn Lakes F.C. Warriors — keep it fun, keep it fair.</footer>
+</div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+  }
+</script>
+</body>
+</html>
