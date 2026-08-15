@@ -1,7 +1,4 @@
+src/
 wrangler.toml
-.git
-.gitignore
-.assetsignore
-node_modules
-.DS_Store
-README.md
+.wrangler/
+*.toml

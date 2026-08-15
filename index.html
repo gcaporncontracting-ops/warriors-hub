@@ -135,10 +135,25 @@
   .ctt-submit:active{transform:translateY(3px);box-shadow:0 1px 0 #9c1c1c;}
   .ctt-submit:disabled{opacity:.55;cursor:not-allowed;}
   .ctt-status{margin:6px 0 0;font-size:12px;min-height:14px;}
+
+  .pin-card{cursor:default;}
+  .pin-card p.pin-rules{font-size:13px;line-height:1.5;color:rgba(255,255,255,.75);margin:8px 0 14px;}
+  .pin-card .pin-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .pin-card label{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.05em;
+    text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:5px;
+  }
+  .pin-card input[type=tel]{
+    width:100%;font-family:'JetBrains Mono',monospace;font-size:18px;letter-spacing:3px;text-align:center;
+    padding:10px 8px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;
+  }
+  .pin-card input[type=tel]:focus{outline:none;border-color:var(--red);}
+  .pin-card .ctt-submit{width:100%;margin-top:12px;}
   .ctt-status.ok{color:#7fe0a3;}
   .ctt-status.err{color:#ff8a8a;}
 
-  .suggestion-card{cursor:default;}
+  .suggestion-card{cursor:default;grid-column:1 / -1;}
   .suggestion-card textarea{
     width:100%;font-family:'Work Sans',sans-serif;font-size:14px;
     padding:9px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
@@ -175,6 +190,18 @@
   .notice-item .notice-date{
     font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.55);flex:none;
   }
+  .notice-manage-link{
+    display:inline-block;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.45);
+    text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;
+  }
+  .notice-manage-link:hover{color:rgba(255,255,255,.75);}
+  .notice-item .notice-delete-btn{
+    flex:none;background:none;border:1px solid rgba(255,120,120,.5);color:#ff8a8a;
+    border-radius:6px;width:22px;height:22px;line-height:1;cursor:pointer;font-size:14px;
+    display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .notice-item .notice-delete-btn:hover{background:rgba(255,120,120,.15);}
 
   .card.grade-picker{cursor:pointer;position:relative;}
   .card.grade-picker .chevron{
@@ -315,7 +342,7 @@
   <div class="card ctt-card ctt-standalone" id="cantMakeTrainingCard">
     <h2>Can't make training?</h2>
     <div class="ctt-row">
-      <input type="text" id="cttName" maxlength="40" placeholder="Your name">
+      <input type="tel" id="cttPin" inputmode="numeric" maxlength="4" placeholder="Your PIN">
       <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
     </div>
     <p class="ctt-status" id="cttStatus"></p>
@@ -334,7 +361,6 @@
       <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
       <h2>Player's Player</h2>
       <p>Make your vote here.</p>
-      <p class="pin-note">Default PIN while testing: <strong>0000</strong></p>
       <div class="grade-options" id="gradeOptions" hidden>
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
@@ -343,13 +369,6 @@
       </div>
     </div>
 
-    <a class="card" href="/strava.html">
-      <img class="icon-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663885134926/KQiulCfcPplqwbtx.png" alt="">
-      <span class="chevron-arrow">›</span>
-      <h2>Strava</h2>
-      <p>See recent club runs and join the leaderboard.</p>
-    </a>
-
     <a class="card" href="https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663885134926/XnJmpzZriRJnLGMc.png" alt="">
       <span class="chevron-arrow">›</span>
@@ -357,14 +376,25 @@
       <p>Spin for a player and go in the running for the first-goal-scorer draw. $2 entry, winner takes it all.</p>
     </a>
 
-    <a class="card" href="https://www.playhq.com/afl/register/7be286" target="_blank" rel="noopener">
-      <img class="icon-img" src="/icon-register.png" alt="">
-      <span class="chevron-arrow">›</span>
-      <h2>Players Register</h2>
-      <p>Sign up or re-register for the season through PlayHQ.</p>
-    </a>
+    <div class="card pin-card" id="pinChangeCard">
+      <h2>Change your PIN</h2>
+      <p class="pin-rules">This is the same PIN used for Player's Player voting and First Goal Scorer. New PIN must be 4 digits, different from your current one, and not already taken by someone else.</p>
+      <div class="pin-fields">
+        <div>
+          <label for="pinCurrentInput">Current PIN</label>
+          <input type="tel" id="pinCurrentInput" inputmode="numeric" maxlength="4" placeholder="••••">
+        </div>
+        <div>
+          <label for="pinNewInput">New PIN</label>
+          <input type="tel" id="pinNewInput" inputmode="numeric" maxlength="4" placeholder="••••">
+        </div>
+      </div>
+      <button type="button" class="ctt-submit" id="pinChangeSubmit">Change PIN</button>
+      <p class="ctt-status" id="pinChangeStatus"></p>
+    </div>
 
     <div class="card suggestion-card" id="suggestionCard">
+      <img class="icon-img" src="/icon-suggestion.png" alt="">
       <h2>Make a suggestion</h2>
       <p>Any input or requests to include anything in this hub — please feel free to suggest here.</p>
       <textarea id="suggestionText" maxlength="500" rows="3" placeholder="Your suggestion..."></textarea>
@@ -379,11 +409,33 @@
     <div id="noticeList" class="notice-list">
       <p class="notice-empty">No one's flagged missing training yet.</p>
     </div>
+    <button type="button" class="notice-manage-link" id="noticeManageLink">Manage notices</button>
+  </div>
+
+  <div class="card pin-card" id="pinRequestCard">
+    <h2>Request a PIN</h2>
+    <p class="pin-rules">Enter your name exactly as it's registered with the club. The club admin will confirm it's really you, then send you your PIN directly.</p>
+    <div>
+      <label for="pinRequestName">Full name (exactly as registered)</label>
+      <input type="text" id="pinRequestName" placeholder="Your full name" style="width:100%;font-size:15px;padding:10px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;">
+    </div>
+    <button type="button" class="ctt-submit" id="pinRequestSubmit">Request my PIN</button>
+    <p class="ctt-status" id="pinRequestStatus"></p>
   </div>
 
   <footer class="foot">
     <img src="/footer.jpg" alt="Accountability, Respect, Mateship" style="width:100%;display:block;">
   </footer>
+</div>
+<a href="#" class="admin-login-link" id="hubAdminLink" style="position:fixed;bottom:10px;right:10px;font-size:10px;color:rgba(255,255,255,.3);text-decoration:none;font-family:'JetBrains Mono',monospace;">ADMIN</a>
+<div id="pinAdminOverlay" style="display:none;position:fixed;inset:0;background:rgba(6,10,24,.92);z-index:1000;overflow-y:auto;padding:24px 16px;">
+  <div style="max-width:520px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-family:'Anton',sans-serif;text-transform:uppercase;color:#fff;margin:0;font-size:20px;">PIN Requests</h2>
+      <button type="button" id="pinAdminClose" style="background:none;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;">Close</button>
+    </div>
+    <div id="pinAdminList"><p style="color:rgba(255,255,255,.6);">Loading...</p></div>
+  </div>
 </div>
 
 <script>
@@ -438,13 +490,6 @@
       return Array.isArray(val) ? val : [];
     }catch(e){ return []; }
   }
-  async function saveNotices(list){
-    await fetch(`/api/store?key=${NOTICE_KEY}`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(list),
-    });
-  }
   function escapeHtml(s){
     return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
@@ -452,9 +497,19 @@
     return new Date(ts).toLocaleDateString(undefined, {weekday:'short', day:'numeric', month:'short'});
   }
 
+  const NOTICE_ADMIN_KEY = 'clfc_hub_notice_admin_pass';
+  function noticeAdminUnlocked(){
+    // This only gates whether delete buttons are SHOWN in the UI — the
+    // actual delete is verified server-side against the stored passcode
+    // on every request, so a wrong/stale value here just makes the
+    // buttons visible without letting anything actually get deleted.
+    return !!localStorage.getItem(NOTICE_ADMIN_KEY);
+  }
+
   async function renderNoticeBoard(){
     const list = await loadNotices();
     const noticeList = document.getElementById('noticeList');
+    const unlocked = noticeAdminUnlocked();
     // Keep only the last 20, most recent first — this is a lightweight
     // rolling notice, not a permanent record.
     const recent = list.slice(-20).reverse();
@@ -466,18 +521,61 @@
       <div class="notice-item">
         <span class="notice-name">${escapeHtml(n.name)} can't make training</span>
         <span class="notice-date">${friendlyDate(n.ts)}</span>
+        ${unlocked ? `<button type="button" class="notice-delete-btn" data-ts="${n.ts}" title="Remove this notice">\u00d7</button>` : ''}
       </div>
     `).join('');
+
+    if (unlocked){
+      noticeList.querySelectorAll('.notice-delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const ts = Number(btn.dataset.ts);
+          btn.disabled = true;
+          const pass = localStorage.getItem(NOTICE_ADMIN_KEY);
+          try{
+            const res = await fetch('/api/admin/delete-notice', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ passcode: pass, key: NOTICE_KEY, ts }),
+            });
+            if (!res.ok){
+              const d = await res.json().catch(() => ({}));
+              alert(d.error || 'Could not delete.');
+              localStorage.removeItem(NOTICE_ADMIN_KEY);
+              document.getElementById('noticeManageLink').textContent = 'Manage notices';
+            }
+          }catch(e){
+            alert('Network error deleting notice.');
+          }
+          renderNoticeBoard();
+        });
+      });
+    }
   }
 
+  document.getElementById('noticeManageLink').addEventListener('click', () => {
+    if (noticeAdminUnlocked()){
+      localStorage.removeItem(NOTICE_ADMIN_KEY);
+      document.getElementById('noticeManageLink').textContent = 'Manage notices';
+      renderNoticeBoard();
+      return;
+    }
+    // Not verified here — the passcode is only ever checked server-side,
+    // on the actual delete call, so nothing secret ships to the browser.
+    const pass = prompt('Admin passcode:');
+    if (!pass) return;
+    localStorage.setItem(NOTICE_ADMIN_KEY, pass);
+    document.getElementById('noticeManageLink').textContent = 'Done managing';
+    renderNoticeBoard();
+  });
+
   document.getElementById('cttSubmit').addEventListener('click', async () => {
-    const input = document.getElementById('cttName');
+    const input = document.getElementById('cttPin');
     const status = document.getElementById('cttStatus');
     const btn = document.getElementById('cttSubmit');
-    const name = input.value.trim();
+    const pin = input.value.trim();
 
-    if (!name){
-      status.textContent = 'Enter your name first.';
+    if (!/^\d{4}$/.test(pin)){
+      status.textContent = 'Enter your 4-digit PIN.';
       status.className = 'ctt-status err';
       return;
     }
@@ -487,9 +585,17 @@
     status.className = 'ctt-status';
 
     try{
-      const list = await loadNotices();
-      list.push({ name, ts: Date.now() });
-      await saveNotices(list);
+      const res = await fetch('/api/notice/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin, noticeKey: NOTICE_KEY }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok){
+        status.textContent = data.error || 'Could not post — try again.';
+        status.className = 'ctt-status err';
+        return;
+      }
       input.value = '';
       status.textContent = 'Posted to the Notice Board.';
       status.className = 'ctt-status ok';
@@ -502,6 +608,9 @@
     }
   });
 
+  if (noticeAdminUnlocked()){
+    document.getElementById('noticeManageLink').textContent = 'Done managing';
+  }
   renderNoticeBoard();
 
   // ---------- Make a suggestion (emails gcaporncontracting@gmail.com via Web3Forms) ----------
@@ -548,6 +657,188 @@
       btn.disabled = false;
     }
   });
+
+  // ---------- Change your PIN (shared with Player's Player voting + First Goal Scorer) ----------
+  document.getElementById('pinChangeSubmit').addEventListener('click', async () => {
+    const oldEl = document.getElementById('pinCurrentInput');
+    const newEl = document.getElementById('pinNewInput');
+    const status = document.getElementById('pinChangeStatus');
+    const btn = document.getElementById('pinChangeSubmit');
+    const oldPin = oldEl.value.trim();
+    const newPin = newEl.value.trim();
+
+    if (!/^\d{4}$/.test(oldPin) || !/^\d{4}$/.test(newPin)){
+      status.textContent = 'Both PINs must be 4 digits.';
+      status.className = 'ctt-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Updating...';
+    status.className = 'ctt-status';
+
+    try{
+      const res = await fetch('/api/change-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldPin, newPin }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success){
+        oldEl.value = '';
+        newEl.value = '';
+        status.textContent = 'PIN changed — use your new PIN from now on.';
+        status.className = 'ctt-status ok';
+      } else {
+        status.textContent = data.error || 'Could not change PIN — try again.';
+        status.className = 'ctt-status err';
+      }
+    }catch(e){
+      status.textContent = 'Network error — try again.';
+      status.className = 'ctt-status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  // ---------- Forgot your PIN? (request -> admin approval -> PIN sent) ----------
+  document.getElementById('pinRequestSubmit').addEventListener('click', async () => {
+    const nameEl = document.getElementById('pinRequestName');
+    const status = document.getElementById('pinRequestStatus');
+    const btn = document.getElementById('pinRequestSubmit');
+    const name = nameEl.value.trim();
+
+    if (!name){
+      status.textContent = 'Enter your full name.';
+      status.className = 'ctt-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Sending request...';
+    status.className = 'ctt-status';
+
+    try{
+      const res = await fetch('/api/pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok){
+        nameEl.value = '';
+        status.textContent = data.message || 'Request sent — the admin will review it shortly.';
+        status.className = 'ctt-status ok';
+      } else {
+        status.textContent = data.error || 'Could not send request — try again.';
+        status.className = 'ctt-status err';
+      }
+    }catch(e){
+      status.textContent = 'Network error — try again.';
+      status.className = 'ctt-status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  // ---------- Admin: review + approve/deny PIN requests ----------
+  const PIN_ADMIN_KEY = 'clfc_hub_admin_pass';
+  document.getElementById('hubAdminLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    let pass = localStorage.getItem(PIN_ADMIN_KEY);
+    if (!pass){
+      pass = prompt('Admin passcode:');
+      if (!pass) return;
+      localStorage.setItem(PIN_ADMIN_KEY, pass);
+    }
+    document.getElementById('pinAdminOverlay').style.display = 'block';
+    loadPinRequests();
+  });
+  document.getElementById('pinAdminClose').addEventListener('click', () => {
+    document.getElementById('pinAdminOverlay').style.display = 'none';
+  });
+
+  async function loadPinRequests(){
+    const pass = localStorage.getItem(PIN_ADMIN_KEY);
+    const list = document.getElementById('pinAdminList');
+    list.innerHTML = '<p style="color:rgba(255,255,255,.6);">Loading...</p>';
+    try{
+      const res = await fetch('/api/admin/pin-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: pass }),
+      });
+      const data = await res.json();
+      if (!res.ok){
+        if (res.status === 401){ localStorage.removeItem(PIN_ADMIN_KEY); }
+        list.innerHTML = `<p style="color:#ff8a8a;">${data.error || 'Could not load requests.'}</p>`;
+        return;
+      }
+      const pending = data.requests.filter(r => r.status === 'pending');
+      const resolved = data.requests.filter(r => r.status !== 'pending').slice(0, 10);
+      if (pending.length === 0){
+        list.innerHTML = '<p style="color:rgba(255,255,255,.6);">No pending requests.</p>';
+      } else {
+        list.innerHTML = pending.map(r => `
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:14px;margin-bottom:10px;">
+            <div style="color:#fff;font-weight:700;">${r.name}</div>
+            <div style="color:rgba(255,255,255,.4);font-size:11px;margin:4px 0 10px;">Requested ${new Date(r.createdAt).toLocaleString()}</div>
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="pin-approve-btn" data-id="${r.id}" style="flex:1;background:#1c7a3d;color:#fff;border:none;border-radius:8px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;">Approve</button>
+              <button type="button" class="pin-deny-btn" data-id="${r.id}" style="flex:1;background:#7a1010;color:#fff;border:none;border-radius:8px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;">Deny</button>
+            </div>
+            <div class="pin-result" id="pin-result-${r.id}"></div>
+          </div>
+        `).join('');
+      }
+      if (resolved.length){
+        list.innerHTML += '<p style="color:rgba(255,255,255,.4);font-size:11px;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.05em;">Recent</p>' +
+          resolved.map(r => `<div style="color:rgba(255,255,255,.5);font-size:12px;padding:4px 0;">${r.name} — ${r.status}</div>`).join('');
+      }
+      document.querySelectorAll('.pin-approve-btn').forEach(btn => {
+        btn.addEventListener('click', () => resolvePinRequest(btn.dataset.id, 'approve'));
+      });
+      document.querySelectorAll('.pin-deny-btn').forEach(btn => {
+        btn.addEventListener('click', () => resolvePinRequest(btn.dataset.id, 'deny'));
+      });
+    }catch(e){
+      list.innerHTML = '<p style="color:#ff8a8a;">Network error — try again.</p>';
+    }
+  }
+
+  async function resolvePinRequest(requestId, action){
+    const pass = localStorage.getItem(PIN_ADMIN_KEY);
+    const resultEl = document.getElementById(`pin-result-${requestId}`);
+    resultEl.innerHTML = '<p style="color:rgba(255,255,255,.6);margin-top:8px;">Working...</p>';
+    try{
+      const res = await fetch(`/api/admin/${action}-pin-request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: pass, requestId }),
+      });
+      const data = await res.json();
+      if (!res.ok){
+        resultEl.innerHTML = `<p style="color:#ff8a8a;margin-top:8px;">${data.error || 'Failed.'}</p>`;
+        return;
+      }
+      if (action === 'deny'){
+        resultEl.innerHTML = '<p style="color:rgba(255,255,255,.6);margin-top:8px;">Denied.</p>';
+        setTimeout(loadPinRequests, 1200);
+        return;
+      }
+      // Approved — show the PIN directly so it can be sent on manually
+      // (text, in person, however you'd normally reach them).
+      resultEl.innerHTML = `
+        <div style="margin-top:10px;background:rgba(0,0,0,.3);border-radius:8px;padding:10px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:4px;color:var(--gold);text-align:center;">${data.pin}</div>
+          <div style="font-size:11px;margin-top:6px;text-align:center;color:rgba(255,255,255,.6);">Send this to them yourself.</div>
+        </div>
+      `;
+      setTimeout(loadPinRequests, 4000);
+    }catch(e){
+      resultEl.innerHTML = '<p style="color:#ff8a8a;margin-top:8px;">Network error.</p>';
+    }
+  }
 </script>
 <script>
   if ('serviceWorker' in navigator) {
@@ -612,7 +903,7 @@
     { icon: '/icon-fines.png', title: 'Fines Wall', text: 'Nominate a teammate, see the wall, check who owes what.' },
     { icon: '/icon-vote.png', title: "Player's Player", text: 'Vote each week. PIN is 0000 while testing.' },
     { emoji: '🙋', title: "Can't Make Training?", text: 'Post your name — it shows on the Notice Board below.' },
-    { emoji: '🎯', title: 'First Goal Scorer & Register', text: 'Spin for the first-goal-scorer draw, register through PlayHQ, and Strava — one tap away.' },
+    { emoji: '🎯', title: 'First Goal Scorer & Register', text: 'Spin for the first-goal-scorer draw and register through PlayHQ — one tap away.' },
     { emoji: '💡', title: 'Got an idea?', text: 'Suggest anything for the hub — no name required.' },
   ];
 
