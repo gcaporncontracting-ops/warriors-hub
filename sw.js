@@ -1,15 +1,24 @@
-const CACHE_NAME = 'warriors-hub-v2';
+const CACHE_NAME = 'warriors-hub-v3';
 const APP_SHELL = [
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
-  '/logo.png',
   '/crest.png',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME).then((cache) =>
+      // Cache each file independently rather than cache.addAll(), which
+      // fails the ENTIRE install if even one URL 404s. That's exactly what
+      // happened with the old /logo.png entry — a single missing file was
+      // silently breaking the service worker for everyone.
+      Promise.all(
+        APP_SHELL.map((url) =>
+          cache.add(url).catch((err) => console.warn('sw: failed to precache', url, err))
+        )
+      )
+    )
   );
   self.skipWaiting();
 });
