@@ -135,21 +135,6 @@
   .ctt-submit:active{transform:translateY(3px);box-shadow:0 1px 0 #9c1c1c;}
   .ctt-submit:disabled{opacity:.55;cursor:not-allowed;}
   .ctt-status{margin:6px 0 0;font-size:12px;min-height:14px;}
-
-  .pin-card{cursor:default;}
-  .pin-card p.pin-rules{font-size:13px;line-height:1.5;color:rgba(255,255,255,.75);margin:8px 0 14px;}
-  .pin-card .pin-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .pin-card label{
-    display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.05em;
-    text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:5px;
-  }
-  .pin-card input[type=tel]{
-    width:100%;font-family:'JetBrains Mono',monospace;font-size:18px;letter-spacing:3px;text-align:center;
-    padding:10px 8px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
-    background:rgba(255,255,255,.08);color:#fff;
-  }
-  .pin-card input[type=tel]:focus{outline:none;border-color:var(--red);}
-  .pin-card .ctt-submit{width:100%;margin-top:12px;}
   .ctt-status.ok{color:#7fe0a3;}
   .ctt-status.err{color:#ff8a8a;}
 
@@ -349,6 +334,12 @@
   </div>
 
   <div class="grid">
+    <a class="card" href="/change-pin">
+      <img class="icon-img" src="/icon-pinrequest.png" alt="">
+      <h2>Request a PIN</h2>
+      <span class="chevron-arrow">›</span>
+    </a>
+
     <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="/icon-fines.png" alt="">
       <h2>Fines Wall</h2>
@@ -373,22 +364,11 @@
       <span class="chevron-arrow">›</span>
     </a>
 
-    <div class="card pin-card" id="pinChangeCard">
+    <a class="card" href="/change-pin">
+      <img class="icon-img" src="/icon-pinchange.png" alt="">
       <h2>Change your PIN</h2>
-      <p class="pin-rules">This is the same PIN used for Player's Player voting and First Goal Scorer. New PIN must be 4 digits, different from your current one, and not already taken by someone else.</p>
-      <div class="pin-fields">
-        <div>
-          <label for="pinCurrentInput">Current PIN</label>
-          <input type="tel" id="pinCurrentInput" inputmode="numeric" maxlength="4" placeholder="••••">
-        </div>
-        <div>
-          <label for="pinNewInput">New PIN</label>
-          <input type="tel" id="pinNewInput" inputmode="numeric" maxlength="4" placeholder="••••">
-        </div>
-      </div>
-      <button type="button" class="ctt-submit" id="pinChangeSubmit">Change PIN</button>
-      <p class="ctt-status" id="pinChangeStatus"></p>
-    </div>
+      <span class="chevron-arrow">›</span>
+    </a>
 
     <div class="card suggestion-card" id="suggestionCard">
       <img class="icon-img" src="/icon-suggestion.png" alt="">
@@ -407,17 +387,6 @@
       <p class="notice-empty">No one's flagged missing training yet.</p>
     </div>
     <button type="button" class="notice-manage-link" id="noticeManageLink">Manage notices</button>
-  </div>
-
-  <div class="card pin-card" id="pinRequestCard">
-    <h2>Request a PIN</h2>
-    <p class="pin-rules">Enter your name exactly as it's registered with the club. The club admin will confirm it's really you, then send you your PIN directly.</p>
-    <div>
-      <label for="pinRequestName">Full name (exactly as registered)</label>
-      <input type="text" id="pinRequestName" placeholder="Your full name" style="width:100%;font-size:15px;padding:10px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;">
-    </div>
-    <button type="button" class="ctt-submit" id="pinRequestSubmit">Request my PIN</button>
-    <p class="ctt-status" id="pinRequestStatus"></p>
   </div>
 
   <footer class="foot">
@@ -645,89 +614,6 @@
         status.className = 'ctt-status ok';
       } else {
         status.textContent = 'Could not send — try again.';
-        status.className = 'ctt-status err';
-      }
-    }catch(e){
-      status.textContent = 'Network error — try again.';
-      status.className = 'ctt-status err';
-    }finally{
-      btn.disabled = false;
-    }
-  });
-
-  // ---------- Change your PIN (shared with Player's Player voting + First Goal Scorer) ----------
-  document.getElementById('pinChangeSubmit').addEventListener('click', async () => {
-    const oldEl = document.getElementById('pinCurrentInput');
-    const newEl = document.getElementById('pinNewInput');
-    const status = document.getElementById('pinChangeStatus');
-    const btn = document.getElementById('pinChangeSubmit');
-    const oldPin = oldEl.value.trim();
-    const newPin = newEl.value.trim();
-
-    if (!/^\d{4}$/.test(oldPin) || !/^\d{4}$/.test(newPin)){
-      status.textContent = 'Both PINs must be 4 digits.';
-      status.className = 'ctt-status err';
-      return;
-    }
-
-    btn.disabled = true;
-    status.textContent = 'Updating...';
-    status.className = 'ctt-status';
-
-    try{
-      const res = await fetch('/api/change-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ oldPin, newPin }),
-      });
-      const data = await res.json();
-      if (res.ok && data.success){
-        oldEl.value = '';
-        newEl.value = '';
-        status.textContent = 'PIN changed — use your new PIN from now on.';
-        status.className = 'ctt-status ok';
-      } else {
-        status.textContent = data.error || 'Could not change PIN — try again.';
-        status.className = 'ctt-status err';
-      }
-    }catch(e){
-      status.textContent = 'Network error — try again.';
-      status.className = 'ctt-status err';
-    }finally{
-      btn.disabled = false;
-    }
-  });
-
-  // ---------- Forgot your PIN? (request -> admin approval -> PIN sent) ----------
-  document.getElementById('pinRequestSubmit').addEventListener('click', async () => {
-    const nameEl = document.getElementById('pinRequestName');
-    const status = document.getElementById('pinRequestStatus');
-    const btn = document.getElementById('pinRequestSubmit');
-    const name = nameEl.value.trim();
-
-    if (!name){
-      status.textContent = 'Enter your full name.';
-      status.className = 'ctt-status err';
-      return;
-    }
-
-    btn.disabled = true;
-    status.textContent = 'Sending request...';
-    status.className = 'ctt-status';
-
-    try{
-      const res = await fetch('/api/pin-request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      });
-      const data = await res.json();
-      if (res.ok && data.ok){
-        nameEl.value = '';
-        status.textContent = data.message || 'Request sent — the admin will review it shortly.';
-        status.className = 'ctt-status ok';
-      } else {
-        status.textContent = data.error || 'Could not send request — try again.';
         status.className = 'ctt-status err';
       }
     }catch(e){
