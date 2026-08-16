@@ -71,7 +71,7 @@
     display:block;text-decoration:none;color:#fff;
     background:rgba(6,10,24,.78);
     border-radius:16px;
-    padding:14px 14px 42px;
+    padding:15px 20px 15px 22px;
     border:2px solid var(--blue);
     box-shadow:0 0 18px rgba(29,79,216,.45), 0 10px 24px rgba(0,0,0,.5);
     transition:transform .12s, box-shadow .12s;
@@ -86,7 +86,7 @@
   .card.disabled{
     pointer-events:none;opacity:.6;filter:grayscale(.2);
   }
-  .card .icon-img{width:88%;max-width:150px;height:auto;margin:2px auto 4px;display:block;}
+  .card .icon-img{width:38px;height:auto;margin-bottom:8px;display:block;}
 
   .card h2{
     font-family:'Anton', sans-serif;text-transform:uppercase;
@@ -98,7 +98,7 @@
     font-family:'JetBrains Mono',monospace;letter-spacing:.02em;
   }
   .card .chevron-arrow{
-    position:absolute;bottom:16px;right:20px;
+    position:absolute;top:15px;right:20px;
     font-size:20px;font-weight:700;
   }
   .card:nth-child(odd) .chevron-arrow{color:var(--red);}
@@ -351,14 +351,16 @@
   <div class="grid">
     <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="/icon-fines.png" alt="">
-      <h2>Fines Wall</h2>
       <span class="chevron-arrow">›</span>
+      <h2>Fines Wall</h2>
+      <p>Nominate a teammate for a fine, see the weekly wall, and check the tally board.</p>
     </a>
 
     <div class="card grade-picker" id="gradePickerCard">
       <img class="icon-img" src="/icon-vote.png" alt="">
-      <h2>Player's Player</h2>
       <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
+      <h2>Player's Player</h2>
+      <p>Make your vote here.</p>
       <div class="grade-options" id="gradeOptions" hidden>
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
         <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
@@ -369,8 +371,9 @@
 
     <a class="card" href="https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="/icon-fgs.png" alt="">
-      <h2>First Goal Scorer</h2>
       <span class="chevron-arrow">›</span>
+      <h2>First Goal Scorer</h2>
+      <p>Spin for a player and go in the running for the first-goal-scorer draw. $2 entry, winner takes it all.</p>
     </a>
 
     <div class="card pin-card" id="pinChangeCard">
