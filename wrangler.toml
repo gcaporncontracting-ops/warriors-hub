@@ -1,15 +1,27 @@
 name = "warriors-hub"
-main = "src/worker.js"
+main = "worker.js"
 compatibility_date = "2026-08-08"
 
 [assets]
-directory = "./"
+directory = "./public"
 binding = "ASSETS"
 
+# Standalone — only used for the notice board (post/delete "can't make
+# training" entries). Nothing here is shared with other apps.
 [[kv_namespaces]]
 binding = "NOTICE_KV"
 id = "3422755a01514d2f884dc8e6db5e57ad"
 
+# Shared with Warriors-vote-v2 and clfc-first-goal-scorer — this is the
+# single source of truth for player identity (name/PIN/grades) across the
+# whole club app ecosystem. The hub only ever touches:
+#   pin:{slug}        -> current PIN for that person
+#   pinused:{pin}      -> reverse index, which slug currently holds a PIN
+#   name:{slug}        -> display name
+#   pinrequest:{id}     -> a pending/resolved PIN request record
+#   pinrequest_index    -> ordered list of pinrequest ids (most recent first)
+# It never touches vote:/grades:/gradelist: keys — those belong to the
+# voting app and First Goal Scorer's PlayHQ sync.
 [[kv_namespaces]]
 binding = "VOTES_KV"
 id = "5484efe25986416ca14a9072c6b841dd"

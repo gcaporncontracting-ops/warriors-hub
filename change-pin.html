@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Change or Request PIN — Cockburn Lakes Warriors</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1c4d">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#132a6e;
+    --navy-deep:#0b1c4d;
+    --red:#d62828;
+    --blue:#1d4fd8;
+    --gold:#f2b134;
+    --ink:#14161c;
+    --paper:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background-color:#050810;
+    background-image:url('/wallpaper.jpg');
+    background-size:cover;
+    background-position:top center;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+  }
+  .wrap{max-width:520px;margin:0 auto;padding:24px 18px 60px;position:relative;}
+  .back-link{
+    display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.03em;
+    background:rgba(6,10,24,.6);border:1.5px solid rgba(255,255,255,.25);border-radius:999px;
+    padding:8px 16px;margin-bottom:20px;
+  }
+  h1{
+    font-family:'Anton', sans-serif;text-transform:uppercase;text-align:center;
+    font-size:clamp(24px,7vw,32px);margin:8px 0 6px;color:#fff;letter-spacing:.02em;
+  }
+  .sub{text-align:center;font-size:14px;color:rgba(255,255,255,.7);margin:0 0 26px;}
+
+  .tabs{display:flex;gap:10px;margin-bottom:20px;}
+  .tab-btn{
+    flex:1;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;font-size:13px;padding:12px;border-radius:10px;cursor:pointer;
+    background:rgba(6,10,24,.6);color:rgba(255,255,255,.7);border:2px solid rgba(255,255,255,.2);
+  }
+  .tab-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .card{
+    background:rgba(6,10,24,.78);
+    border-radius:16px;
+    padding:20px;
+    border:2px solid var(--blue);
+    box-shadow:0 0 18px rgba(29,79,216,.45), 0 10px 24px rgba(0,0,0,.5);
+  }
+  .card p.rules{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.75);margin:0 0 18px;}
+  label{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;
+  }
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  input[type=tel],input[type=text]{
+    width:100%;font-family:'JetBrains Mono',monospace;font-size:17px;
+    padding:11px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:#fff;
+  }
+  input[type=tel]{text-align:center;letter-spacing:3px;}
+  input[type=text]{letter-spacing:normal;font-size:15px;}
+  input:focus{outline:none;border-color:var(--red);}
+
+  button.submit-btn{
+    width:100%;margin-top:16px;font-family:'JetBrains Mono',monospace;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;background:var(--red);color:#fff;border:none;
+    border-radius:10px;padding:14px;font-size:14.5px;cursor:pointer;box-shadow:0 6px 0 #9c1c1c;
+  }
+  button.submit-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #9c1c1c;}
+  button.submit-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .status{margin:12px 0 0;font-size:12.5px;min-height:16px;text-align:center;}
+  .status.ok{color:#7fe0a3;}
+  .status.err{color:#ff8a8a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="/">← Home</a>
+  <h1>Your PIN</h1>
+  <p class="sub">Same PIN used for Player's Player voting and First Goal Scorer.</p>
+
+  <div class="tabs">
+    <button type="button" class="tab-btn active" id="tabChange">Change PIN</button>
+    <button type="button" class="tab-btn" id="tabRequest">Request PIN</button>
+  </div>
+
+  <div class="panel active" id="panelChange">
+    <div class="card">
+      <p class="rules">Know your current PIN and just want a new one? New PIN must be 4 digits, different from your current one, and not already taken by someone else.</p>
+      <div class="fields">
+        <div>
+          <label for="pinCurrentInput">Current PIN</label>
+          <input type="tel" id="pinCurrentInput" inputmode="numeric" maxlength="4" placeholder="••••">
+        </div>
+        <div>
+          <label for="pinNewInput">New PIN</label>
+          <input type="tel" id="pinNewInput" inputmode="numeric" maxlength="4" placeholder="••••">
+        </div>
+      </div>
+      <button type="button" class="submit-btn" id="pinChangeSubmit">Change PIN</button>
+      <p class="status" id="pinChangeStatus"></p>
+    </div>
+  </div>
+
+  <div class="panel" id="panelRequest">
+    <div class="card">
+      <p class="rules">Forgotten your PIN, or never had one? Enter your name exactly as it's registered with the club. The club admin will confirm it's really you, then send you your PIN directly.</p>
+      <div>
+        <label for="pinRequestName">Full name (exactly as registered)</label>
+        <input type="text" id="pinRequestName" placeholder="Your full name">
+      </div>
+      <button type="button" class="submit-btn" id="pinRequestSubmit">Request my PIN</button>
+      <p class="status" id="pinRequestStatus"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Tab switching ----------
+  const tabChange = document.getElementById('tabChange');
+  const tabRequest = document.getElementById('tabRequest');
+  const panelChange = document.getElementById('panelChange');
+  const panelRequest = document.getElementById('panelRequest');
+  tabChange.addEventListener('click', () => {
+    tabChange.classList.add('active'); tabRequest.classList.remove('active');
+    panelChange.classList.add('active'); panelRequest.classList.remove('active');
+  });
+  tabRequest.addEventListener('click', () => {
+    tabRequest.classList.add('active'); tabChange.classList.remove('active');
+    panelRequest.classList.add('active'); panelChange.classList.remove('active');
+  });
+
+  // ---------- Change your PIN (same logic/endpoint as before) ----------
+  document.getElementById('pinChangeSubmit').addEventListener('click', async () => {
+    const oldEl = document.getElementById('pinCurrentInput');
+    const newEl = document.getElementById('pinNewInput');
+    const status = document.getElementById('pinChangeStatus');
+    const btn = document.getElementById('pinChangeSubmit');
+    const oldPin = oldEl.value.trim();
+    const newPin = newEl.value.trim();
+
+    if (!/^\d{4}$/.test(oldPin) || !/^\d{4}$/.test(newPin)){
+      status.textContent = 'Both PINs must be 4 digits.';
+      status.className = 'status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Updating...';
+    status.className = 'status';
+
+    try{
+      const res = await fetch('/api/change-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldPin, newPin }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success){
+        oldEl.value = '';
+        newEl.value = '';
+        status.textContent = 'PIN changed — use your new PIN from now on.';
+        status.className = 'status ok';
+      } else {
+        status.textContent = data.error || 'Could not change PIN — try again.';
+        status.className = 'status err';
+      }
+    }catch(e){
+      status.textContent = 'Network error — try again.';
+      status.className = 'status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  // ---------- Forgot your PIN? (request -> admin approval -> PIN sent) ----------
+  document.getElementById('pinRequestSubmit').addEventListener('click', async () => {
+    const nameEl = document.getElementById('pinRequestName');
+    const status = document.getElementById('pinRequestStatus');
+    const btn = document.getElementById('pinRequestSubmit');
+    const name = nameEl.value.trim();
+
+    if (!name){
+      status.textContent = 'Enter your full name.';
+      status.className = 'status err';
+      return;
+    }
+
+    btn.disabled = true;
+    status.textContent = 'Sending request...';
+    status.className = 'status';
+
+    try{
+      const res = await fetch('/api/pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok){
+        nameEl.value = '';
+        status.textContent = data.message || 'Request sent — the admin will review it shortly.';
+        status.className = 'status ok';
+      } else {
+        status.textContent = data.error || 'Could not send request — try again.';
+        status.className = 'status err';
+      }
+    }catch(e){
+      status.textContent = 'Network error — try again.';
+      status.className = 'status err';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
