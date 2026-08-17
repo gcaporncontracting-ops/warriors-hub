@@ -407,39 +407,6 @@
     } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
   });
 
-  // --- PIN LOGIC ---
-  document.getElementById('pinChangeSubmit').addEventListener('click', async () => {
-    const oldPin = document.getElementById('pinCurrentInput').value.trim();
-    const newPin = document.getElementById('pinNewInput').value.trim();
-    const status = document.getElementById('pinChangeStatus'), btn = document.getElementById('pinChangeSubmit');
-    btn.disabled = true;
-    try {
-      const res = await fetch('/api/change-pin', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ oldPin, newPin })
-      });
-      const data = await res.json();
-      status.textContent = data.success ? 'PIN Updated!' : (data.error || 'Error');
-      status.className = data.success ? 'ctt-status ok' : 'ctt-status err';
-    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
-  });
-
-  document.getElementById('pinRequestSubmit').addEventListener('click', async () => {
-    const name = document.getElementById('pinRequestName').value.trim();
-    const status = document.getElementById('pinRequestStatus'), btn = document.getElementById('pinRequestSubmit');
-    if(!name) return;
-    btn.disabled = true;
-    try {
-      const res = await fetch('/api/pin-request', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ name })
-      });
-      const data = await res.json();
-      status.textContent = data.ok ? 'Request Sent!' : 'Error';
-      status.className = data.ok ? 'ctt-status ok' : 'ctt-status err';
-    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
-  });
-
   // --- INSTALL SPLASH ---
   const splash = document.getElementById('installSplash');
   if (window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('installSplashDismissed') === 'yes') {
