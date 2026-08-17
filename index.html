@@ -313,7 +313,7 @@
 <div class="install-splash" id="installSplash">
   <img src="/crest.png" alt="Cockburn Lakes Warriors crest" class="install-logo">
   <p class="install-title">Warriors Hub</p>
-  <p class="install-sub" id="installSubtext">Add this to your home screen for one-tap access to fines, fixtures, and voting.</p>
+  <p class="install-sub" id="installSubtext">Add this to your home screen. IOS press share and then create short cut</p>
   <button type="button" class="install-btn" id="installBtn">Install App</button>
   <button type="button" class="install-later" id="installLater">Maybe later</button>
 </div>
@@ -352,7 +352,7 @@
     <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
       <img class="icon-img" src="/icon-fines.png" alt="">
       <h2>Fines Wall</h2>
-      <span class="chevron-arrow">›</span>
+      <span class=>›</span>
     </a>
 
     <div class="card grade-picker" id="gradePickerCard">
@@ -373,32 +373,23 @@
       <span class="chevron-arrow">›</span>
     </a>
 
-    <div class="card pin-card" id="pinChangeCard">
-      <h2>Change your PIN</h2>
-      <p class="pin-rules">This is the same PIN used for Player's Player voting and First Goal Scorer. New PIN must be 4 digits, different from your current one, and not already taken by someone else.</p>
-      <div class="pin-fields">
+    <div class="icon-img" src="/icon-pinchange.png" alt="">
+      <h2>Change or Request Pin</h2>
+      <span class="chevron-arrow">,</span>
+    </a>
         <div>
-          <label for="pinCurrentInput">Current PIN</label>
-          <input type="tel" id="pinCurrentInput" inputmode="numeric" maxlength="4" placeholder="••••">
-        </div>
-        <div>
-          <label for="pinNewInput">New PIN</label>
-          <input type="tel" id="pinNewInput" inputmode="numeric" maxlength="4" placeholder="••••">
-        </div>
-      </div>
-      <button type="button" class="ctt-submit" id="pinChangeSubmit">Change PIN</button>
-      <p class="ctt-status" id="pinChangeStatus"></p>
-    </div>
+        
 
-    <div class="card suggestion-card" id="suggestionCard">
-      <img class="icon-img" src="/icon-suggestion.png" alt="">
+    <div class="icon-img" src="/icon-suggestion.png" alt="">
       <h2>Make a suggestion</h2>
-      <p>Any input or requests to include anything in this hub — please feel free to suggest here.</p>
-      <textarea id="suggestionText" maxlength="500" rows="3" placeholder="Your suggestion..."></textarea>
-      <button type="button" class="ctt-submit" id="suggestionSubmit">Submit</button>
-      <p class="ctt-status" id="suggestionStatus"></p>
+      <span class="chevron-arrow">,</span>
     </div>
   </div>
+
+      <img class="icon-img" src="/icon-pinrequest.png" alt="">
+      <h2>Request a PIN</h2>
+      <span class="chevron-arrow">›</span>
+      </a>
 
   <div class="notice-board">
     <h2 class="notice-title">Notice Board</h2>
@@ -409,11 +400,7 @@
     <button type="button" class="notice-manage-link" id="noticeManageLink">Manage notices</button>
   </div>
 
-  <a class="card" href="/change-pin">
-      <img class="icon-img" src="/icon-pinrequest.png" alt="">
-      <h2>Request a PIN</h2>
-      <span class="chevron-arrow">›</span>
-    </a>
+  
 
   <footer class="foot">
     <img src="/footer.jpg" alt="Accountability, Respect, Mateship" style="width:100%;display:block;">
