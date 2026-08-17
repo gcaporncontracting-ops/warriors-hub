@@ -348,52 +348,95 @@
     <p class="ctt-status" id="cttStatus"></p>
   </div>
 
-   
-<div class="container">
+/* Container wrapper */
+  .container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
 
-<div class="grid">
-    <!-- Card 1: Direct Link Card -->
-    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
-      <img src="/icon-fines.png" alt="">
+/* 2-Column Grid Setup */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Exactly 2 columns of equal size */
+  gap: 16px; /* Even spacing between cards */
+}
 
- 
-  
-  <!-- Card 3 -->
-  
-  
-  <div class="card">
-    <img src="icon-suggestion.png" alt="Idea">
-    
-  
- <!-- Card 4 -->
- <div class="card">   
-  <img src="icon-fgs.png" alt="First Goal">
+/* Evenly Sized Cards */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1; /* Makes every card a perfect square, ensuring even sizing */
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  box-sizing: border-box;
+}
 
-<!-- Card 5 -->
-<div class="card">
-    <img src="icon-team.png" alt="Teams">
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  <!-- Card 6 -->
-  <div class="card"> 
-    <img src="icon-pinchange.png" alt="Request or Change Pin">
+/* Image sizing inside cards */
+.card img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
 
+/* Optional label text styling */
+.card span:not(.chevron) {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  text-align: center;
+}
 
-    <!-- Card 2: Interactive Dropdown Card -->
-    <div class="card"> 
-      <img  src="/icon-vote.png" alt="">
-      <span class="chevron chevron-arrow" id="gradeChevron">▾</span>
-      
-      <!-- Hidden options that appear when clicked -->
-       <div class="grade-options" id="gradeOptions" hidden>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/colts">Colts</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
-      
+/* Dropdown styling adjustments */
+.dropdown-card {
+  position: relative;
+}
 
-  </div>
+.grade-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
 
-</div> <!-- End of .container -->
+.grade-options a {
+  padding: 10px 12px;
+  text-decoration: none;
+  color: #2d3748;
+  font-size: 13px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.grade-options a:last-child {
+  border-bottom: none;
+}
+
+.grade-options a:hover {
+  background-color: #f7fafc;
+}
+
 
   
   <div class="notice-board">
