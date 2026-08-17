@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warriors Hub — PIN Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#132a6e; --red:#d62828; --blue:#1d4fd8; --gold:#f2b134; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ font-family:'Work Sans', sans-serif; color:#fff; min-height:100vh; background:#050810; }
+  .wrap{max-width:640px;margin:0 auto;padding:24px 20px 80px;}
+  h1{ font-family:'Anton',sans-serif; text-transform:uppercase; font-size:26px; margin-bottom:4px; }
+  .sub{ opacity:0.6; font-size:13px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; }
+  .card {
+    background: rgba(6, 10, 24, 0.78); border-radius: 16px; padding: 20px;
+    border: 2px solid var(--gold); margin-top: 20px;
+    box-shadow: 0 0 18px rgba(242, 177, 52, 0.35);
+  }
+  .card h2 { font-family:'Anton',sans-serif; text-transform:uppercase; font-size:18px; margin:0 0 12px; }
+  input { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px; color: #fff; width:100%; }
+  button {
+    background: var(--red); color:#fff; border:none; border-radius:8px; padding:10px 18px;
+    font-family:'JetBrains Mono',monospace; font-weight:700; cursor:pointer; text-transform:uppercase;
+    box-shadow: 0 4px 0 #9c1c1c;
+  }
+  button:active{ transform:translateY(2px); box-shadow:0 2px 0 #9c1c1c; }
+  button.approve{ background:#2c6e3f; box-shadow:0 4px 0 #17431f; }
+  button.approve:active{ box-shadow:0 2px 0 #17431f; }
+  button.deny{ background:#555; box-shadow:0 4px 0 #333; }
+  button.deny:active{ box-shadow:0 2px 0 #333; }
+  .status{ font-size:12px; margin-top:8px; min-height:14px; }
+  .status.ok{ color:#7fe0a3; }
+  .status.err{ color:#ff8a8a; }
+  .pill{ display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-family:'JetBrains Mono',monospace; text-transform:uppercase; margin-left:6px; }
+  .pill.pending{ background:var(--red); }
+  .pill.approved{ background:#2c6e3f; }
+  .pill.denied{ background:#555; }
+  .req-row{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); gap:10px; flex-wrap:wrap; }
+  .req-meta{ font-size:11px; opacity:0.5; font-family:'JetBrains Mono',monospace; margin-top:4px; }
+  .req-actions{ display:flex; gap:8px; }
+  #gate{ max-width:360px; margin:80px auto; text-align:center; }
+  .pin-reveal{ font-family:'JetBrains Mono',monospace; letter-spacing:3px; font-size:18px; color:var(--gold); }
+</style>
+</head>
+<body>
+
+<div id="gate" class="wrap">
+  <h1>Admin Access</h1>
+  <p class="sub">Enter the admin passcode to review PIN requests</p>
+  <div class="card">
+    <input type="password" id="passcodeInput" placeholder="Passcode" style="margin-bottom:10px;">
+    <button id="unlockBtn" style="width:100%;">Unlock</button>
+    <p class="status err" id="gateStatus"></p>
+  </div>
+</div>
+
+<div id="dashboard" class="wrap" style="display:none;">
+  <h1>PIN Requests</h1>
+  <p class="sub">Cockburn Lakes Warriors Hub</p>
+  <div class="card">
+    <h2>Pending &amp; Recent Requests</h2>
+    <div id="requestsList">Loading...</div>
+  </div>
+</div>
+
+<script>
+  let PASSCODE = '';
+
+  function setStatus(el, msg, ok){ el.textContent = msg; el.className = 'status ' + (ok ? 'ok' : 'err'); }
+
+  document.getElementById('unlockBtn').addEventListener('click', async () => {
+    const pass = document.getElementById('passcodeInput').value.trim();
+    const gateStatus = document.getElementById('gateStatus');
+    if (!pass) return;
+    PASSCODE = pass;
+    const ok = await loadRequests();
+    if (ok) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    } else {
+      setStatus(gateStatus, 'Invalid passcode', false);
+    }
+  });
+
+  async function loadRequests(){
+    const el = document.getElementById('requestsList');
+    try {
+      const res = await fetch('/api/admin/pin-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE })
+      });
+      if (res.status === 401) return false;
+      const data = await res.json();
+      renderRequests(data.requests || []);
+      return true;
+    } catch(e) { el.innerHTML = 'Error loading requests.'; return false; }
+  }
+
+  function renderRequests(requests){
+    const el = document.getElementById('requestsList');
+    if (requests.length === 0) { el.innerHTML = '<p style="opacity:0.5;">No requests yet.</p>'; return; }
+    el.innerHTML = requests.map(r => `
+      <div class="req-row">
+        <div>
+          <b>${r.name}</b>
+          <span class="pill ${r.status}">${r.status}</span>
+          <div class="req-meta">${new Date(r.createdAt).toLocaleString()}</div>
+          ${r.pin ? `<div class="pin-reveal">${r.pin}</div>` : ''}
+        </div>
+        ${r.status === 'pending' ? `
+          <div class="req-actions">
+            <button class="approve" onclick="approveRequest('${r.id}', this)">Approve</button>
+            <button class="deny" onclick="denyRequest('${r.id}')">Deny</button>
+          </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  async function approveRequest(id, btn){
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/admin/approve-pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, requestId: id })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`PIN for this player: ${data.pin}\n\nPass this on to them directly.`);
+        loadRequests();
+      } else {
+        alert(data.error || 'Failed to approve');
+        btn.disabled = false;
+      }
+    } catch(e) { alert('Network error'); btn.disabled = false; }
+  }
+  window.approveRequest = approveRequest;
+
+  async function denyRequest(id){
+    try {
+      const res = await fetch('/api/admin/deny-pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, requestId: id })
+      });
+      const data = await res.json();
+      if (data.ok) loadRequests(); else alert(data.error || 'Failed to deny');
+    } catch(e) { alert('Network error'); }
+  }
+  window.denyRequest = denyRequest;
+</script>
+</body>
+</html>
