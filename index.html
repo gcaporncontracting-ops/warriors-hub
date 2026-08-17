@@ -269,10 +269,10 @@
     </div>
 
     <!-- Card 3: Idea -->
-    <div class="card" onclick="document.getElementById('suggestionBox').scrollIntoView({behavior:'smooth'})">
+    <a class="card" href="/suggestion.html">
       <img src="icon-suggestion.png" alt="Idea">
       <span>Suggestion</span>
-    </div>
+    </a>
 
     <!-- Card 4: First Goal -->
     <a class="card" href="https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/">
@@ -302,13 +302,7 @@
     <button type="button" id="noticeManageLink" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Manage notices</button>
   </div>
 
-  <!-- Suggestion Box -->
-  <div class="ctt-card" id="suggestionBox" style="border-color:var(--red);">
-    <h2>Got an idea?</h2>
-    <textarea id="suggestionText" rows="3" placeholder="What should we add to the hub?"></textarea>
-    <button type="button" class="ctt-submit" id="suggestionSubmit" style="width:100%; margin-top:10px;">Send Suggestion</button>
-    <p class="ctt-status" id="suggestionStatus"></p>
-  </div>
+
 
 
   </div>
@@ -383,20 +377,7 @@
     } catch(e) { status.textContent = 'Network error'; } finally { btn.disabled = false; }
   });
 
-  // --- SUGGESTION LOGIC ---
-  document.getElementById('suggestionSubmit').addEventListener('click', async () => {
-    const textEl = document.getElementById('suggestionText'), status = document.getElementById('suggestionStatus'), btn = document.getElementById('suggestionSubmit');
-    const val = textEl.value.trim();
-    if(!val) return;
-    btn.disabled = true; status.textContent = 'Sending...';
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ access_key: 'a59f79b9-cb63-4cc8-ab40-7465fd609f14', message: val })
-      });
-      if(res.ok) { textEl.value = ''; status.textContent = 'Sent!'; status.className='ctt-status ok'; }
-    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
-  });
+
 
   // --- INSTALL SPLASH ---
   const splash = document.getElementById('installSplash');

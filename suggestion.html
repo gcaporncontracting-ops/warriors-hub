@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockburn Lakes Warriors — Suggestions</title>
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#132a6e; --navy-deep:#0b1c4d; --red:#d62828; --blue:#1d4fd8; --gold:#f2b134; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif; color:#fff; min-height:100vh;
+    background-color:#050810;
+    background-image:url('/wallpaper.jpg');
+    background-size:cover; background-position:top center;
+    background-attachment:fixed; background-repeat:no-repeat;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  header.top{ text-align:center; padding:24px 0 10px; }
+  .hero-banner{ width:100%; max-width:320px; margin:0 auto; }
+  .hero-banner img{ width:100%; display:block; border-radius:10px; }
+  .back-link{
+    display:inline-block; margin:16px 0 4px; color:#aaa; text-decoration:none;
+    font-family:'JetBrains Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.05em;
+  }
+  .back-link:hover{ color:#fff; }
+  .ctt-card {
+    background: rgba(6, 10, 24, 0.78); border-radius: 16px; padding: 20px;
+    border: 2px solid var(--red); margin-top: 20px;
+    box-shadow: 0 0 18px rgba(214, 40, 40, 0.35);
+  }
+  .ctt-card h2 { font-family: 'Anton', sans-serif; text-transform: uppercase; font-size: 20px; margin: 0 0 12px; }
+  .ctt-card textarea {
+    width: 100%; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 8px; padding: 12px; color: #fff; font-family: 'Work Sans', sans-serif;
+    margin-bottom: 10px; resize: vertical;
+  }
+  .ctt-submit {
+    background: var(--red); color: #fff; border: none; border-radius: 8px; padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 0 #9c1c1c; text-transform: uppercase;
+  }
+  .ctt-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #9c1c1c; }
+  .ctt-submit:disabled{ opacity:0.6; cursor:not-allowed; }
+  .ctt-status { font-size: 12px; margin-top: 8px; min-height:14px; }
+  .ctt-status.ok { color: #7fe0a3; }
+  .ctt-status.err { color: #ff8a8a; }
+  footer { text-align:center; padding:60px 0 20px; opacity:0.4; font-size:12px; font-family:'JetBrains Mono',monospace; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="hero-banner"><img src="/crest.png" alt="Warriors Crest"></div>
+    <a class="back-link" href="/">&larr; Back to Hub</a>
+  </header>
+
+  <div class="ctt-card">
+    <h2>Got an idea?</h2>
+    <p style="font-size: 14px; opacity: 0.8; margin-bottom: 16px;">What should we add to the hub? Let us know your thoughts.</p>
+    <textarea id="suggestionText" rows="6" placeholder="Type your suggestion here..."></textarea>
+    <button type="button" class="ctt-submit" id="suggestionSubmit" style="width:100%;">Send Suggestion</button>
+    <p class="ctt-status" id="suggestionStatus"></p>
+  </div>
+
+  <footer>&copy; 2026 Cockburn Lakes Warriors Hub</footer>
+</div>
+
+<script>
+  function setStatus(el, msg, ok){ el.textContent = msg; el.className = 'ctt-status ' + (ok ? 'ok' : 'err'); }
+
+  document.getElementById('suggestionSubmit').addEventListener('click', async () => {
+    const textEl = document.getElementById('suggestionText');
+    const status = document.getElementById('suggestionStatus');
+    const btn = document.getElementById('suggestionSubmit');
+    const val = textEl.value.trim();
+    
+    if(!val) { setStatus(status, 'Please enter a suggestion', false); return; }
+    
+    btn.disabled = true;
+    setStatus(status, 'Sending...', true);
+    
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ 
+            access_key: 'a59f79b9-cb63-4cc8-ab40-7465fd609f14', 
+            subject: 'New Hub Suggestion',
+            message: val 
+        })
+      });
+      if(res.ok) { 
+        textEl.value = ''; 
+        setStatus(status, 'Sent! Thanks for your feedback.', true);
+      } else {
+        setStatus(status, 'Error sending suggestion. Try again later.', false);
+      }
+    } catch(e) { 
+        setStatus(status, 'Network error. Check your connection.', false); 
+    } finally { 
+        btn.disabled = false; 
+    }
+  });
+</script>
+</body>
+</html>
