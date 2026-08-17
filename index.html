@@ -409,16 +409,11 @@
     <button type="button" class="notice-manage-link" id="noticeManageLink">Manage notices</button>
   </div>
 
-  <div class="card pin-card" id="pinRequestCard">
-    <h2>Request a PIN</h2>
-    <p class="pin-rules">Enter your name exactly as it's registered with the club. The club admin will confirm it's really you, then send you your PIN directly.</p>
-    <div>
-      <label for="pinRequestName">Full name (exactly as registered)</label>
-      <input type="text" id="pinRequestName" placeholder="Your full name" style="width:100%;font-size:15px;padding:10px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;">
-    </div>
-    <button type="button" class="ctt-submit" id="pinRequestSubmit">Request my PIN</button>
-    <p class="ctt-status" id="pinRequestStatus"></p>
-  </div>
+  <a class="card" href="/change-pin">
+      <img class="icon-img" src="/icon-pinrequest.png" alt="">
+      <h2>Request a PIN</h2>
+      <span class="chevron-arrow">›</span>
+    </a>
 
   <footer class="foot">
     <img src="/footer.jpg" alt="Accountability, Respect, Mateship" style="width:100%;display:block;">
