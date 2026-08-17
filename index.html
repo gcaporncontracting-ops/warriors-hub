@@ -52,7 +52,7 @@
     border-radius:10px;
   }
 
-  /* --- GRID SYSTEM --- */
+  /* --- FIXED GRID SYSTEM --- */
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -67,33 +67,33 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1;
-    background: rgba(6, 10, 24, 0.78);
-    border: 2px solid var(--blue);
+    background: rgba(255, 255, 255, 0.06); /* Subtle background */
+    border: none; /* REMOVED NEON SQUARE BORDER */
     border-radius: 16px;
-    padding: 16px;
+    padding: 12px;
     text-decoration: none;
     color: #fff;
-    box-shadow: 0 0 18px rgba(29, 79, 216, 0.45), 0 10px 24px rgba(0, 0, 0, 0.5);
-    transition: transform 0.12s, box-shadow 0.12s;
+    /* CLEANER SHADOW - NO NEON GLOW */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    transition: transform 0.12s, background 0.12s;
     position: relative;
     box-sizing: border-box;
     text-align: center;
   }
 
-  .card:nth-child(odd) {
-    border-color: var(--red);
-    box-shadow: 0 0 18px rgba(214, 40, 40, 0.45), 0 10px 24px rgba(0, 0, 0, 0.5);
-  }
-
   .card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.1);
   }
 
+  /* --- BIGGER ICONS --- */
   .card img {
-    width: 60%;
-    max-width: 80px;
+    width: 85%; /* INCREASED SIZE */
+    max-width: 140px; /* INCREASED SIZE */
     height: auto;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    display: block;
+    object-fit: contain;
   }
 
   .card span {
@@ -102,23 +102,21 @@
     font-size: 16px;
     letter-spacing: 0.05em;
     color: #fff;
+    margin-top: 4px;
   }
 
   /* --- DROPDOWN CARD --- */
   .card.grade-picker { cursor: pointer; }
   .grade-options {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(6, 10, 24, 0.95);
-    border-radius: 14px;
+    inset: 0;
+    background: rgba(6, 10, 24, 0.98);
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px;
-    gap: 6px;
+    padding: 12px;
+    gap: 8px;
     z-index: 10;
   }
   .grade-options[hidden] { display: none; }
@@ -127,11 +125,12 @@
     text-decoration: none;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
     color: #fff;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
   }
   .grade-options a:nth-child(odd) { background: var(--red); }
   .grade-options a:nth-child(even) { background: var(--blue); }
@@ -171,6 +170,7 @@
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 4px 0 #9c1c1c;
+    text-transform: uppercase;
   }
   .ctt-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #9c1c1c; }
   .ctt-status { font-size: 12px; margin-top: 8px; }
@@ -192,7 +192,7 @@
 
   /* --- OVERLAYS --- */
   .install-splash, .tutorial-splash {
-    position: fixed; inset: 0; z-index: 100;
+    position: fixed; inset: 0; z-index: 1000;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: var(--navy-deep); padding: 32px; text-align: center;
   }
@@ -214,7 +214,7 @@
 <!-- Install Splash -->
 <div class="install-splash" id="installSplash">
   <img src="/crest.png" alt="Warriors Crest" style="width:120px; margin-bottom:20px;">
-  <p style="font-family:'Anton',sans-serif; font-size:32px; margin:0;">Warriors Hub</p>
+  <p style="font-family:'Anton',sans-serif; font-size:32px; margin:0; text-transform:uppercase;">Warriors Hub</p>
   <p id="installSubtext" style="opacity:0.8; margin: 10px 0 20px;">Add this to your home screen for quick access.</p>
   <button type="button" class="ctt-submit" id="installBtn" style="padding:15px 40px;">Install App</button>
   <button type="button" id="installLater" style="background:none; border:none; color:#aaa; text-decoration:underline; margin-top:20px; cursor:pointer;">Maybe later</button>
@@ -227,7 +227,7 @@
     <h2 id="tutorialTitle" style="font-family:'Anton',sans-serif; text-transform:uppercase; font-size:28px;"></h2>
     <p id="tutorialText" style="opacity:0.8; line-height:1.6; margin-bottom:30px;"></p>
     <div id="tutorialDots" style="margin-bottom:20px;"></div>
-    <button type="button" class="ctt-submit" id="tutorialNext">Next</button>
+    <button type="button" class="ctt-submit" id="tutorialNext" style="width:100%;">Next</button>
   </div>
 </div>
 
@@ -300,13 +300,13 @@
   <!-- Notice Board -->
   <div class="ctt-card notice-board">
     <h2>Notice Board</h2>
-    <p style="font-size:11px; opacity:0.5; margin-top:-10px; margin-bottom:15px;">Recent flags for missing training</p>
+    <p style="font-size:11px; opacity:0.5; margin-top:-10px; margin-bottom:15px; font-family:'JetBrains Mono',monospace;">Recent flags for missing training</p>
     <div id="noticeList"></div>
-    <button type="button" id="noticeManageLink" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px;">Manage notices</button>
+    <button type="button" id="noticeManageLink" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Manage notices</button>
   </div>
 
   <!-- Suggestion Box -->
-  <div class="ctt-card" id="suggestionBox">
+  <div class="ctt-card" id="suggestionBox" style="border-color:var(--red);">
     <h2>Got an idea?</h2>
     <textarea id="suggestionText" rows="3" placeholder="What should we add to the hub?"></textarea>
     <button type="button" class="ctt-submit" id="suggestionSubmit" style="width:100%; margin-top:10px;">Send Suggestion</button>
@@ -318,12 +318,12 @@
     <h2>PIN Management</h2>
     <div class="pin-fields" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
       <div>
-        <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px;">CURRENT PIN</label>
-        <input type="tel" id="pinCurrentInput" maxlength="4" style="width:100%; text-align:center;">
+        <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">CURRENT PIN</label>
+        <input type="tel" id="pinCurrentInput" maxlength="4" style="width:100%; text-align:center; font-size:20px; letter-spacing:4px;">
       </div>
       <div>
-        <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px;">NEW PIN</label>
-        <input type="tel" id="pinNewInput" maxlength="4" style="width:100%; text-align:center;">
+        <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">NEW PIN</label>
+        <input type="tel" id="pinNewInput" maxlength="4" style="width:100%; text-align:center; font-size:20px; letter-spacing:4px;">
       </div>
     </div>
     <button type="button" class="ctt-submit" id="pinChangeSubmit" style="width:100%;">Update PIN</button>
@@ -331,7 +331,7 @@
     
     <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">
     
-    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px;">FORGOT PIN? ENTER NAME:</label>
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:4px; font-family:'JetBrains Mono',monospace;">FORGOT PIN? ENTER NAME:</label>
     <div class="ctt-row">
       <input type="text" id="pinRequestName" placeholder="Full Name">
       <button type="button" class="ctt-submit" id="pinRequestSubmit">Request</button>
@@ -339,21 +339,23 @@
     <p class="ctt-status" id="pinRequestStatus"></p>
   </div>
 
-  <footer style="text-align:center; padding:40px 0; opacity:0.4; font-size:12px;">
+  <footer style="text-align:center; padding:60px 0; opacity:0.4; font-size:12px; font-family:'JetBrains Mono',monospace;">
     &copy; 2026 Cockburn Lakes Warriors Hub<br>
-    <a href="#" id="hubAdminLink" style="color:inherit;">Admin Login</a>
+    <a href="#" id="hubAdminLink" style="color:inherit; text-decoration:none; margin-top:10px; display:inline-block;">ADMIN LOGIN</a>
   </footer>
 </div>
 
 <!-- Admin Overlay -->
-<div id="pinAdminOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:200; padding:20px; overflow-y:auto;">
-  <button id="pinAdminClose" style="float:right; background:none; border:none; color:#fff; font-size:24px;">&times;</button>
-  <h2 style="font-family:'Anton',sans-serif; color:#fff;">Admin Dashboard</h2>
-  <div id="pinAdminList"></div>
+<div id="pinAdminOverlay" style="display:none; position:fixed; inset:0; background:rgba(6,10,24,0.98); z-index:2000; padding:20px; overflow-y:auto;">
+  <div style="max-width:500px; margin:0 auto;">
+    <button id="pinAdminClose" style="float:right; background:none; border:1px solid #fff; color:#fff; border-radius:8px; padding:8px 15px; cursor:pointer;">CLOSE</button>
+    <h2 style="font-family:'Anton',sans-serif; color:#fff; text-transform:uppercase;">Admin Dashboard</h2>
+    <div id="pinAdminList" style="margin-top:20px;"></div>
+  </div>
 </div>
 
 <script>
-  // --- VOTE DROPDOWN LOGIC ---
+  // --- VOTE DROPDOWN ---
   const voteCard = document.getElementById('voteCard');
   const gradeOptions = document.getElementById('gradeOptions');
   voteCard.addEventListener('click', (e) => {
@@ -364,23 +366,14 @@
 
   // --- TRAINING NOTICE LOGIC ---
   function currentNoticePeriodKey(){
-    const d = new Date();
-    const day = d.getDay();
-    if(day === 2 || day === 4) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${dd}`;
-    }
-    for(let i=1; i<7; i++){
-      d.setDate(d.getDate()-1);
-      const dy = d.getDay();
-      if(dy === 2 || dy === 4){
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
+    const d = new Date(); d.setHours(0,0,0,0);
+    for(let i=0; i<7; i++){
+      const day = d.getDay();
+      if(day===3 || day===5){
+        const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
         return `${y}-${m}-${dd}`;
       }
+      d.setDate(d.getDate()-1);
     }
     return 'fallback';
   }
@@ -407,83 +400,81 @@
   renderNoticeBoard();
 
   document.getElementById('cttSubmit').addEventListener('click', async () => {
-    const input = document.getElementById('cttPin');
-    const status = document.getElementById('cttStatus');
+    const input = document.getElementById('cttPin'), status = document.getElementById('cttStatus'), btn = document.getElementById('cttSubmit');
     const pin = input.value.trim();
-    if (!/^\d{4}$/.test(pin)) { status.textContent = 'Enter 4-digit PIN'; return; }
-    status.textContent = 'Posting...';
+    if (!/^\d{4}$/.test(pin)) { status.textContent = 'Enter 4-digit PIN'; status.className='ctt-status err'; return; }
+    btn.disabled = true; status.textContent = 'Posting...';
     try {
       const res = await fetch('/api/notice/post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ pin, noticeKey: NOTICE_KEY })
       });
       if (res.ok) {
-        input.value = '';
-        status.textContent = 'Posted!';
-        status.className = 'ctt-status ok';
+        input.value = ''; status.textContent = 'Posted!'; status.className = 'ctt-status ok';
         renderNoticeBoard();
       } else {
-        const d = await res.json();
-        status.textContent = d.error || 'Error';
-        status.className = 'ctt-status err';
+        const d = await res.json(); status.textContent = d.error || 'Error'; status.className = 'ctt-status err';
       }
-    } catch(e) { status.textContent = 'Network error'; }
+    } catch(e) { status.textContent = 'Network error'; } finally { btn.disabled = false; }
   });
 
   // --- SUGGESTION LOGIC ---
   document.getElementById('suggestionSubmit').addEventListener('click', async () => {
-    const textEl = document.getElementById('suggestionText');
-    const status = document.getElementById('suggestionStatus');
+    const textEl = document.getElementById('suggestionText'), status = document.getElementById('suggestionStatus'), btn = document.getElementById('suggestionSubmit');
     const val = textEl.value.trim();
     if(!val) return;
-    status.textContent = 'Sending...';
+    btn.disabled = true; status.textContent = 'Sending...';
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: 'a59f79b9-cb63-4cc8-ab40-7465fd609f14',
-          message: val
-        })
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ access_key: 'a59f79b9-cb63-4cc8-ab40-7465fd609f14', message: val })
       });
       if(res.ok) { textEl.value = ''; status.textContent = 'Sent!'; status.className='ctt-status ok'; }
-    } catch(e) { status.textContent = 'Error'; }
+    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
   });
 
-  // --- PIN CHANGE LOGIC ---
+  // --- PIN LOGIC ---
   document.getElementById('pinChangeSubmit').addEventListener('click', async () => {
     const oldPin = document.getElementById('pinCurrentInput').value.trim();
     const newPin = document.getElementById('pinNewInput').value.trim();
-    const status = document.getElementById('pinChangeStatus');
+    const status = document.getElementById('pinChangeStatus'), btn = document.getElementById('pinChangeSubmit');
+    btn.disabled = true;
     try {
       const res = await fetch('/api/change-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ oldPin, newPin })
       });
       const data = await res.json();
       status.textContent = data.success ? 'PIN Updated!' : (data.error || 'Error');
       status.className = data.success ? 'ctt-status ok' : 'ctt-status err';
-    } catch(e) { status.textContent = 'Error'; }
+    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
   });
 
-  // --- INSTALL SPLASH LOGIC ---
+  document.getElementById('pinRequestSubmit').addEventListener('click', async () => {
+    const name = document.getElementById('pinRequestName').value.trim();
+    const status = document.getElementById('pinRequestStatus'), btn = document.getElementById('pinRequestSubmit');
+    if(!name) return;
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/pin-request', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name })
+      });
+      const data = await res.json();
+      status.textContent = data.ok ? 'Request Sent!' : 'Error';
+      status.className = data.ok ? 'ctt-status ok' : 'ctt-status err';
+    } catch(e) { status.textContent = 'Error'; } finally { btn.disabled = false; }
+  });
+
+  // --- INSTALL SPLASH ---
   const splash = document.getElementById('installSplash');
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (isStandalone || localStorage.getItem('installSplashDismissed') === 'yes') {
+  if (window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('installSplashDismissed') === 'yes') {
     splash.setAttribute('hidden', '');
   }
-  document.getElementById('installBtn').addEventListener('click', () => {
-    localStorage.setItem('installSplashDismissed', 'yes');
-    splash.setAttribute('hidden', '');
-  });
-  document.getElementById('installLater').addEventListener('click', () => {
-    localStorage.setItem('installSplashDismissed', 'yes');
-    splash.setAttribute('hidden', '');
-  });
+  document.getElementById('installBtn').addEventListener('click', () => { localStorage.setItem('installSplashDismissed', 'yes'); splash.setAttribute('hidden', ''); });
+  document.getElementById('installLater').addEventListener('click', () => { localStorage.setItem('installSplashDismissed', 'yes'); splash.setAttribute('hidden', ''); });
 
-  // --- TUTORIAL LOGIC ---
+  // --- TUTORIAL ---
   const tutorialSteps = [
     { icon: '/crest.png', title: 'Welcome!', text: 'One hub for fines, votes, and fixtures.' },
     { icon: '/icon-fines.png', title: 'Fines Wall', text: 'Nominate teammates and check who owes what.' },
@@ -494,25 +485,16 @@
   function renderTutorialStep(){
     const step = tutorialSteps[tutorialIndex];
     const iconWrap = document.getElementById('tutorialIconWrap');
-    iconWrap.innerHTML = step.icon ? `<img src="${step.icon}" style="width:80px;">` : step.emoji;
+    iconWrap.innerHTML = step.icon ? `<img src="${step.icon}" style="width:100px;">` : step.emoji;
     document.getElementById('tutorialTitle').textContent = step.title;
     document.getElementById('tutorialText').textContent = step.text;
-    document.getElementById('tutorialDots').innerHTML = tutorialSteps.map((_, i) =>
-      `<span class="tutorial-dot${i === tutorialIndex ? ' active' : ''}"></span>`
-    ).join('');
+    document.getElementById('tutorialDots').innerHTML = tutorialSteps.map((_, i) => `<span class="tutorial-dot${i === tutorialIndex ? ' active' : ''}"></span>`).join('');
   }
   document.getElementById('tutorialNext').addEventListener('click', () => {
-    if (tutorialIndex < tutorialSteps.length - 1){
-      tutorialIndex++; renderTutorialStep();
-    } else {
-      document.getElementById('tutorialSplash').setAttribute('hidden', '');
-      localStorage.setItem('hubTutorialSeen', 'yes');
-    }
+    if (tutorialIndex < tutorialSteps.length - 1){ tutorialIndex++; renderTutorialStep(); }
+    else { document.getElementById('tutorialSplash').setAttribute('hidden', ''); localStorage.setItem('hubTutorialSeen', 'yes'); }
   });
-  document.getElementById('tutorialHelpBtn').addEventListener('click', () => {
-    tutorialIndex = 0; renderTutorialStep();
-    document.getElementById('tutorialSplash').removeAttribute('hidden');
-  });
+  document.getElementById('tutorialHelpBtn').addEventListener('click', () => { tutorialIndex = 0; renderTutorialStep(); document.getElementById('tutorialSplash').removeAttribute('hidden'); });
   if (localStorage.getItem('hubTutorialSeen') !== 'yes' && splash.hasAttribute('hidden')) {
     setTimeout(() => { tutorialIndex = 0; renderTutorialStep(); document.getElementById('tutorialSplash').removeAttribute('hidden'); }, 1000);
   }
