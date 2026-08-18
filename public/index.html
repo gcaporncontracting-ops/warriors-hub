@@ -199,10 +199,25 @@
   .tutorial-dot.active { background: var(--red); width: 20px; border-radius: 4px; }
 
   .tutorial-help-btn {
-    position: fixed; bottom: 20px; right: 20px; z-index: 50;
+    position: fixed; bottom: 20px; right: 82px; z-index: 50;
     width: 44px; height: 44px; border-radius: 50%;
     background: var(--navy); border: 2px solid var(--blue); color: #fff;
     font-weight: 700; cursor: pointer;
+  }
+  .admin-fab{
+    position:fixed; bottom:18px; right:18px; z-index:60;
+    width:58px; height:58px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(6,10,24,.78); border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 4px 20px rgba(0,0,0,.55); backdrop-filter:blur(8px);
+    cursor:pointer; transition:transform .2s, background .2s;
+  }
+  .admin-fab:hover{transform:scale(1.08);background:rgba(6,10,24,.95);}
+  .admin-fab img{width:44px;height:44px;object-fit:contain;}
+  .admin-fab-label{
+    position:absolute; right:0; bottom:-18px; white-space:nowrap;
+    font:700 9px 'JetBrains Mono',monospace; letter-spacing:.05em;
+    color:rgba(255,255,255,.65); text-transform:uppercase;
   }
 </style>
 </head>
@@ -229,6 +244,11 @@
 </div>
 
 <button type="button" class="tutorial-help-btn" id="tutorialHelpBtn">?</button>
+
+<a class="admin-fab" href="/admin-pin.html" aria-label="Open admin hub" title="Admin Hub">
+  <img src="/admin-teepee.png" alt="Admin Hub">
+  <span class="admin-fab-label">Admin</span>
+</a>
 
 <div class="wrap">
   <header class="top">
