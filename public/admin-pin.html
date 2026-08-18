@@ -101,6 +101,33 @@
     </div>
     <p class="status" id="mockRosterStatus"></p>
   </div>
+
+  <div class="card" style="border-color: #2c6e3f; box-shadow: 0 0 18px rgba(44, 110, 63, 0.35);">
+    <h2>Add a Member</h2>
+    <p class="sub">Gives anyone — coach, volunteer, or player — a PIN to use the hub. Does not add them to any roster, team sheet, or voting/wheel list — that only ever comes from PlayHQ sync or a mock roster.</p>
+
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">FULL NAME</label>
+    <input type="text" id="newMemberName" placeholder="e.g. Jane Smith" style="margin-bottom:16px;">
+
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">PLAYING GRADE(S) — OPTIONAL</label>
+    <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:16px;">
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Thirds" class="newMemberGrade" style="width:auto;"> Thirds
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Colts" class="newMemberGrade" style="width:auto;"> Colts
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Reserves" class="newMemberGrade" style="width:auto;"> Reserves
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="League" class="newMemberGrade" style="width:auto;"> League
+      </label>
+    </div>
+
+    <button id="addMemberBtn" style="width:100%; background:#2c6e3f; box-shadow:0 4px 0 #17431f;">ADD MEMBER</button>
+    <p class="status" id="addMemberStatus"></p>
+  </div>
 </div>
 
 <script>
@@ -302,6 +329,39 @@
       setStatus(status, 'Connection failed: ' + e.message, false);
     }
     finally { btn.disabled = false; btn.textContent = 'CLEAR'; }
+  });
+
+  // --- ADD A MEMBER (directory identity / PIN provisioning only) ---
+  document.getElementById('addMemberBtn').addEventListener('click', async () => {
+    const name = document.getElementById('newMemberName').value.trim();
+    const grades = Array.from(document.querySelectorAll('.newMemberGrade:checked')).map(cb => cb.value);
+    const status = document.getElementById('addMemberStatus');
+
+    if (!name) { setStatus(status, 'Enter a full name', false); return; }
+
+    const btn = document.getElementById('addMemberBtn');
+    btn.disabled = true; btn.textContent = 'Adding...';
+    setStatus(status, 'Adding member...', true);
+
+    try {
+      const res = await fetch('/api/admin/add-member', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, name, grades })
+      });
+      const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+      if (!res.ok) {
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      setStatus(status, d.message || `Added ${d.name} — PIN ${d.pin}`, true);
+      document.getElementById('newMemberName').value = '';
+      document.querySelectorAll('.newMemberGrade:checked').forEach(cb => cb.checked = false);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
+    }
+    finally { btn.disabled = false; btn.textContent = 'ADD MEMBER'; }
   });
 </script>
 </body>

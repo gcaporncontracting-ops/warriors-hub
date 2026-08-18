@@ -13,10 +13,11 @@ function uid() {
 import {
   handlePopulateMockRoster,
   handleGetTeams,
-  handleClearMockRoster
+  handleClearMockRoster,
+  handleAddMember
 } from './mock-roster-endpoint.js';
 
-var ADMIN_PASSCODE = "Warriors-YE8899UE";
+var ADMIN_PASSCODE = "94172079";
 var WEB3FORMS_ACCESS_KEY = "a59f79b9-cb63-4cc8-ab40-7465fd609f14";
 async function notifyAdminOfPinRequest(name) {
   try {
@@ -159,6 +160,9 @@ export default {
     }
     if (url.pathname === '/api/admin/clear-mock-roster' && request.method === 'POST') {
       return handleClearMockRoster(request, env);
+    }
+    if (url.pathname === '/api/admin/add-member' && request.method === 'POST') {
+      return handleAddMember(request, env);
     }
 
     if (url.pathname === "/api/admin/pin-requests" && request.method === "POST") {

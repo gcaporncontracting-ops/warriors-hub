@@ -285,3 +285,83 @@ export async function handleGetTeams(request, env, grade) {
     lastUpdated: game.created_at
   });
 }
+
+/**
+ * POST /api/admin/add-member
+ *
+ * Provisions a hub identity (slug + PIN) in `player_directory` for anyone
+ * who needs to use the hub — a coach, volunteer, or player who hasn't come
+ * through a PlayHQ sync yet. This is identity/membership only: it does
+ * NOT add anyone to a game day team sheet or any voting/wheel roster.
+ * Those come exclusively from `games`/`players`, populated by PlayHQ sync
+ * or a mock roster — never from here. `grades` is optional and only
+ * relevant if this person also plays; leave it empty for a coach or
+ * volunteer who just needs hub access (notices, PIN login, etc).
+ *
+ * Body:
+ * {
+ *   "passcode": "Warriors-YE8899UE",   // required
+ *   "name": "Jane Smith",              // required
+ *   "grades": []                       // optional, default []
+ * }
+ */
+export async function handleAddMember(request, env) {
+  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "Warriors-YE8899UE";
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: "Invalid JSON body" }, 400);
+  }
+
+  const { passcode, name, grades = [] } = body;
+
+  if (passcode !== ADMIN_PASSCODE) {
+    return json({ error: "Invalid passcode" }, 401);
+  }
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return json({ error: "name is required" }, 400);
+  }
+  if (!Array.isArray(grades)) {
+    return json({ error: "grades must be an array (can be empty for non-playing members)" }, 400);
+  }
+
+  const trimmedName = name.trim();
+  const slug = trimmedName.toLowerCase().replace(/\s+/g, "-").replace(/'/g, "").replace(/\u2019/g, "");
+
+  const existing = await env.DB.prepare(
+    `SELECT slug FROM player_directory WHERE slug = ?`
+  ).bind(slug).first();
+  if (existing) {
+    return json({ error: "A member with this name already exists in the directory" }, 409);
+  }
+
+  let pin = null;
+  for (let i = 0; i < 20; i++) {
+    const candidate = String(Math.floor(Math.random() * 1e4)).padStart(4, "0");
+    if (candidate === "0000") continue;
+    const clash = await env.DB.prepare(`SELECT slug FROM player_directory WHERE pin = ?`).bind(candidate).first();
+    if (!clash) { pin = candidate; break; }
+  }
+  if (!pin) {
+    return json({ error: "Could not allocate a unique PIN — try again" }, 500);
+  }
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO player_directory (slug, full_name, pin, grades, match_status) VALUES (?, ?, ?, ?, 'manual')`
+    ).bind(slug, trimmedName, pin, JSON.stringify(grades)).run();
+  } catch (err) {
+    return json({ error: "Server error", details: err.message }, 500);
+  }
+
+  return json({
+    ok: true,
+    name: trimmedName,
+    slug,
+    pin,
+    grades,
+    message: `Added ${trimmedName} to the directory — PIN ${pin}`
+  });
+}
