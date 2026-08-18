@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warriors Hub — Teams</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#132a6e; --red:#d62828; --blue:#1d4fd8; --gold:#f2b134; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ font-family:'Work Sans', sans-serif; color:#fff; min-height:100vh; background:#050810; }
+  .wrap{max-width:640px;margin:0 auto;padding:24px 20px 80px;}
+  .home-link{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; color:rgba(255,255,255,.75); text-decoration:none;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:6px 12px;
+    border-radius:999px; margin-bottom:16px;
+  }
+  h1{ font-family:'Anton',sans-serif; text-transform:uppercase; font-size:26px; margin:0 0 4px; }
+  .sub{ opacity:0.6; font-size:13px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; }
+
+  .grade-tabs{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:20px; }
+  .grade-tab{
+    background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.2); border-radius:8px;
+    padding:10px 4px; color:#fff; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:11px;
+    text-transform:uppercase; text-align:center; cursor:pointer; text-decoration:none;
+  }
+  .grade-tab.active{ background:var(--red); border-color:var(--red); }
+
+  .card {
+    background: rgba(6, 10, 24, 0.78); border-radius: 16px; padding: 20px;
+    border: 2px solid var(--gold); margin-top: 16px;
+    box-shadow: 0 0 18px rgba(242, 177, 52, 0.35);
+  }
+  .card h2 { font-family:'Anton',sans-serif; text-transform:uppercase; font-size:18px; margin:0 0 4px; }
+  .fixture{ font-size:13px; opacity:0.75; margin-bottom:4px; }
+  .meta-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .pill{ display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-family:'JetBrains Mono',monospace; text-transform:uppercase; }
+  .pill.mock{ background:#555; }
+  .pill.live{ background:#2c6e3f; }
+  .pill.open{ background:var(--blue); }
+  .pill.locked{ background:var(--red); }
+  .pill.closed{ background:#555; }
+  .updated{ font-size:11px; opacity:0.5; font-family:'JetBrains Mono',monospace; margin-bottom:14px; }
+
+  .player-list{ list-style:none; margin:0; padding:0; }
+  .player-list li{
+    padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:14px;
+  }
+  .player-list li:last-child{ border-bottom:none; }
+  .player-count{ font-family:'JetBrains Mono',monospace; font-size:11px; opacity:0.6; margin-bottom:10px; }
+
+  .empty-state{ text-align:center; padding:30px 10px; opacity:0.7; }
+  .empty-state p{ font-size:13.5px; line-height:1.5; margin:8px 0 0; }
+  .loading{ text-align:center; padding:30px 10px; opacity:0.6; font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .error{ color:#ff8a8a; font-size:13px; text-align:center; padding:20px 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="home-link">&larr; Home</a>
+  <h1>Teams</h1>
+  <p class="sub">Current match-day rosters, by grade</p>
+
+  <div class="grade-tabs" id="gradeTabs">
+    <a class="grade-tab" data-grade="League">League</a>
+    <a class="grade-tab" data-grade="Reserves">Reserves</a>
+    <a class="grade-tab" data-grade="Colts">Colts</a>
+    <a class="grade-tab" data-grade="Thirds">Thirds</a>
+  </div>
+
+  <div id="content" class="loading">Loading…</div>
+</div>
+
+<script>
+  const GRADES = ["League", "Reserves", "Colts", "Thirds"];
+  const params = new URLSearchParams(window.location.search);
+  let currentGrade = params.get("grade");
+  if (!GRADES.includes(currentGrade)) currentGrade = "League";
+
+  const tabsEl = document.getElementById("gradeTabs");
+  const contentEl = document.getElementById("content");
+
+  function setActiveTab(grade){
+    tabsEl.querySelectorAll(".grade-tab").forEach(a => {
+      a.classList.toggle("active", a.dataset.grade === grade);
+    });
+  }
+
+  function fmtTime(iso){
+    if (!iso) return "";
+    try{
+      return new Date(iso.includes("T") ? iso : iso.replace(" ", "T") + "Z")
+        .toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit", day: "numeric", month: "short" });
+    }catch(e){ return iso; }
+  }
+
+  async function loadGrade(grade){
+    currentGrade = grade;
+    setActiveTab(grade);
+    const newUrl = `${window.location.pathname}?grade=${encodeURIComponent(grade)}`;
+    window.history.replaceState({}, "", newUrl);
+
+    contentEl.className = "loading";
+    contentEl.textContent = "Loading…";
+
+    try{
+      const res = await fetch(`/api/teams/${encodeURIComponent(grade)}`);
+      const data = await res.json();
+      if (!res.ok || !data.ok){
+        contentEl.className = "error";
+        contentEl.textContent = data.error || "Could not load this team.";
+        return;
+      }
+      if (!data.game){
+        contentEl.className = "";
+        contentEl.innerHTML = `
+          <div class="card">
+            <div class="empty-state">
+              <h2 style="font-size:16px;">No roster yet for ${grade}</h2>
+              <p>Nothing's been posted for this grade — check back once a mock roster or PlayHQ sync has run.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const g = data.game;
+      const sourcePill = g.is_mock ? `<span class="pill mock">Mock</span>` : `<span class="pill live">PlayHQ</span>`;
+      const statusPill = `<span class="pill ${g.status}">${g.status}</span>`;
+      const fixtureLine = g.away_team ? `${g.home_team || "Warriors"} vs ${g.away_team}` : (g.home_team || "");
+
+      contentEl.className = "";
+      contentEl.innerHTML = `
+        <div class="card">
+          <h2>${grade}</h2>
+          <div class="fixture">${fixtureLine}${g.game_date_time ? " — " + fmtTime(g.game_date_time) : ""}</div>
+          <div class="meta-row">${sourcePill}${statusPill}</div>
+          <div class="player-count">${data.playerCount} player${data.playerCount === 1 ? "" : "s"} — updated ${fmtTime(data.lastUpdated)}</div>
+          <ul class="player-list">
+            ${data.players.map(p => `<li>${p.name}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    }catch(e){
+      contentEl.className = "error";
+      contentEl.textContent = "Network error — try again.";
+    }
+  }
+
+  tabsEl.querySelectorAll(".grade-tab").forEach(a => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      loadGrade(a.dataset.grade);
+    });
+  });
+
+  loadGrade(currentGrade);
+</script>
+</body>
+</html>
