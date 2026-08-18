@@ -67,7 +67,7 @@ function uid() {
  * }
  */
 export async function handlePopulateMockRoster(request, env) {
-  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "Warriors-YE8899UE";
+  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "94172079";
 
   let body;
   try {
@@ -196,7 +196,7 @@ export async function handlePopulateMockRoster(request, env) {
  * }
  */
 export async function handleClearMockRoster(request, env) {
-  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "Warriors-YE8899UE";
+  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "94172079";
 
   let body;
   try {
@@ -306,7 +306,7 @@ export async function handleGetTeams(request, env, grade) {
  * }
  */
 export async function handleAddMember(request, env) {
-  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "Warriors-YE8899UE";
+  const ADMIN_PASSCODE = env.ADMIN_PASSCODE || "94172079";
 
   let body;
   try {

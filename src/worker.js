@@ -17,7 +17,7 @@ import {
   handleAddMember
 } from './mock-roster-endpoint.js';
 
-var ADMIN_PASSCODE = "94172079";
+var ADMIN_PASSCODE = "94172079"; // Standardized to 94172079
 var WEB3FORMS_ACCESS_KEY = "a59f79b9-cb63-4cc8-ab40-7465fd609f14";
 async function notifyAdminOfPinRequest(name) {
   try {
