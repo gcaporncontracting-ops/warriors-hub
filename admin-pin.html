@@ -187,10 +187,17 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ passcode: PASSCODE })
       });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
       const d = await res.json();
-      if (d.ok) setStatus(status, d.message, true);
-      else setStatus(status, d.error, false);
-    } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
+      setStatus(status, d.message || 'Sync complete', true);
+    } catch(e) { 
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false); 
+    }
     finally { btn.disabled = false; btn.textContent = 'SYNC'; }
   });
 
@@ -208,10 +215,17 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ passcode: PASSCODE, grade })
       });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
       const d = await res.json();
-      if (d.ok) setStatus(status, 'Mock game created successfully!', true);
-      else setStatus(status, d.error, false);
-    } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
+      setStatus(status, 'Mock game created successfully!', true);
+    } catch(e) { 
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false); 
+    }
     finally { btn.disabled = false; btn.textContent = 'MOCK'; }
   });
 </script>
