@@ -240,9 +240,12 @@
   <!-- Training Status Section -->
   <div class="ctt-card" id="cantMakeTrainingCard">
     <h2>Can't make training?</h2>
-    <div class="ctt-row">
-      <input type="tel" id="cttPin" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN">
-      <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
+    <div class="ctt-row" style="align-items: stretch;">
+      <input type="tel" id="cttPin" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN" style="height: auto;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="https://clfc-training-wheel.gcaporncontracting.workers.dev/" class="ctt-submit" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; background: var(--blue); box-shadow: 0 4px 0 #132a6e;">Wheel</a>
+        <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
+      </div>
     </div>
     <p class="ctt-status" id="cttStatus"></p>
   </div>
@@ -295,7 +298,7 @@
     <!-- Card 6: Pin Change -->
 <a class="card" href="/pin.html">
   <img src="icon-pinchange.png" alt="PIN">
-  <span>Change PIN</span>
+  <span>Request PIN</span>
 </a>
 
   </div>
