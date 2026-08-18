@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warriors Hub — Player's Player Vote</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#132a6e; --red:#d62828; --blue:#1d4fd8; --gold:#f2b134; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ font-family:'Work Sans', sans-serif; color:#fff; min-height:100vh; background:#050810; }
+  .wrap{max-width:640px;margin:0 auto;padding:24px 20px 80px;}
+  .home-link{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; color:rgba(255,255,255,.75); text-decoration:none;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:6px 12px;
+    border-radius:999px; margin-bottom:16px;
+  }
+  h1{ font-family:'Anton',sans-serif; text-transform:uppercase; font-size:26px; margin:0 0 4px; }
+  .sub{ opacity:0.6; font-size:13px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; }
+
+  .grade-tabs{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:8px; }
+  .grade-tab{
+    background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.2); border-radius:12px;
+    padding:22px 4px; color:#fff; font-family:'Anton',sans-serif; font-weight:400; font-size:18px;
+    text-transform:uppercase; text-align:center; cursor:pointer; text-decoration:none;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform 0.12s;
+  }
+  .grade-tab:hover{ transform:translateY(-4px); }
+  .grade-tab:nth-child(odd){ background:var(--red); border-color:var(--red); box-shadow:0 0 18px rgba(214,40,40,0.35); }
+  .grade-tab:nth-child(even){ background:var(--blue); border-color:var(--blue); box-shadow:0 0 18px rgba(29,79,216,0.35); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="home-link">&larr; Home</a>
+  <h1>Player's Player</h1>
+  <p class="sub">Choose a grade to cast your vote</p>
+
+  <div class="grade-tabs">
+    <a class="grade-tab" href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
+    <a class="grade-tab" href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
+    <a class="grade-tab" href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/colts">Colts</a>
+    <a class="grade-tab" href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
+  </div>
+</div>
+</body>
+</html>

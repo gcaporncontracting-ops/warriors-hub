@@ -259,17 +259,11 @@
       <span>Fines Wall</span>
     </a>
 
-    <!-- Card 2: Vote (Dropdown) -->
-    <div class="card" id="gradeCard">
+    <!-- Card 2: Vote (now links to its own selection page) -->
+    <a class="card" href="/vote.html">
       <img src="/icon-vote.png" alt="Vote">
       <span>Vote</span>
-      <div class="grade-options" id="gradeOptions" hidden>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/league">League</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/reserves">Reserves</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/colts">Colts</a>
-        <a href="https://warriors-vote-v2.gcaporncontracting.workers.dev/vote/thirds">Thirds</a>
-      </div>
-    </div>
+    </a>
 
     <!-- Card 3: Idea -->
     <a class="card" href="/suggestion.html">
@@ -283,23 +277,29 @@
       <span>First Goal</span>
     </a>
 
-    <!-- Card 5: Teams (Dropdown) -->
-    <div class="card" id="teamsCard">
+    <!-- Card 5: Teams (now links to its own selection page) -->
+    <a class="card" href="/teams.html">
       <img src="icon-team.png" alt="Teams">
       <span>Teams</span>
-      <div class="grade-options" id="teamsOptions" hidden>
-        <a href="/teams.html?grade=League">League</a>
-        <a href="/teams.html?grade=Reserves">Reserves</a>
-        <a href="/teams.html?grade=Colts">Colts</a>
-        <a href="/teams.html?grade=Thirds">Thirds</a>
-      </div>
-    </div>
+    </a>
 
     <!-- Card 6: Pin Change -->
 <a class="card" href="/pin.html">
   <img src="icon-pinchange.png" alt="PIN">
   <span>Request PIN</span>
 </a>
+
+    <!-- Card 7: Training Wheel -->
+    <a class="card" href="https://clfc-training-wheel-production.gcaporncontracting.workers.dev">
+      <img src="/training-wheel.png" alt="Training Wheel">
+      <span>Training Wheel</span>
+    </a>
+
+    <!-- Card 8: Cobras -->
+    <a class="card" href="/loading.png">
+      <img src="/cobra.png" alt="Cobras">
+      <span>Cobras</span>
+    </a>
 
   </div>
 
@@ -308,7 +308,7 @@
     <h2>Notice Board</h2>
     <p style="font-size:11px; opacity:0.5; margin-top:-10px; margin-bottom:15px; font-family:'JetBrains Mono',monospace;">Recent flags for missing training</p>
     <div id="noticeList"></div>
-    <button type="button" id="noticeManageLink" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Manage notices</button>
+    <button type="button" id="noticeManageLink" onclick="window.location.href='/admin-pin.html'" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Manage notices</button>
   </div>
 
 
@@ -323,24 +323,6 @@
 </div>
 
 <script>
-  // --- VOTE DROPDOWN ---
-  const gradeCard = document.getElementById('gradeCard');
-  const gradeOptions = document.getElementById('gradeOptions');
-  gradeCard.addEventListener('click', (e) => {
-    if (e.target.tagName !== 'A') {
-      gradeOptions.hidden = !gradeOptions.hidden;
-    }
-  });
-
-  // --- TEAMS DROPDOWN ---
-  const teamsCard = document.getElementById('teamsCard');
-  const teamsOptions = document.getElementById('teamsOptions');
-  teamsCard.addEventListener('click', (e) => {
-    if (e.target.tagName !== 'A') {
-      teamsOptions.hidden = !teamsOptions.hidden;
-    }
-  });
-
   // --- TRAINING NOTICE LOGIC ---
   function currentNoticePeriodKey(){
     const d = new Date(); d.setHours(0,0,0,0);
