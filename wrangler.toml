@@ -3,7 +3,7 @@ main = "src/worker.js"
 compatibility_date = "2026-08-08"
 
 [assets]
-directory = "./"
+directory = "./public"
 binding = "ASSETS"
 
 [[kv_namespaces]]
