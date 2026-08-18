@@ -82,6 +82,25 @@
     </div>
     <p class="status" id="kickerStatus"></p>
   </div>
+
+  <div class="card" style="border-color: var(--navy); box-shadow: 0 0 18px rgba(11, 28, 77, 0.35);">
+    <h2>Mock Roster Admin</h2>
+    <p class="sub">Generate or clear randomised match-day squads from the player directory</p>
+    
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">SELECT GRADE</label>
+    <select id="mockRosterGradeSelect" style="background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px; color: #fff; width:100%; margin-bottom:16px;">
+      <option value="League">League</option>
+      <option value="Reserves">Reserves</option>
+      <option value="Colts">Colts</option>
+      <option value="Thirds">Thirds</option>
+    </select>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <button id="populateMockBtn" style="background:var(--gold); color:var(--navy); box-shadow:0 4px 0 #b58527;">GENERATE</button>
+      <button id="clearMockBtn" style="background:var(--red); color:#fff; box-shadow:0 4px 0 #8b1c1c;">CLEAR</button>
+    </div>
+    <p class="status" id="mockRosterStatus"></p>
+  </div>
 </div>
 
 <script>
@@ -227,6 +246,62 @@
       setStatus(status, 'Connection failed: ' + e.message, false); 
     }
     finally { btn.disabled = false; btn.textContent = 'MOCK'; }
+  });
+
+  document.getElementById('populateMockBtn').addEventListener('click', async () => {
+    const grade = document.getElementById('mockRosterGradeSelect').value;
+    if (!confirm(`Generate mock roster for ${grade}?`)) return;
+    const btn = document.getElementById('populateMockBtn');
+    const status = document.getElementById('mockRosterStatus');
+    btn.disabled = true; btn.textContent = 'Generating...';
+    setStatus(status, 'Generating mock roster...', true);
+
+    try {
+      const res = await fetch('/api/admin/populate-mock-roster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, grade, squadSize: 17, includeSlug: 'gavin-caporn' })
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      const d = await res.json();
+      setStatus(status, d.message || 'Mock roster generated successfully!', true);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
+    }
+    finally { btn.disabled = false; btn.textContent = 'GENERATE'; }
+  });
+
+  document.getElementById('clearMockBtn').addEventListener('click', async () => {
+    const grade = document.getElementById('mockRosterGradeSelect').value;
+    if (!confirm(`Clear mock roster for ${grade}? This cannot be undone.`)) return;
+    const btn = document.getElementById('clearMockBtn');
+    const status = document.getElementById('mockRosterStatus');
+    btn.disabled = true; btn.textContent = 'Clearing...';
+    setStatus(status, 'Clearing mock roster...', true);
+
+    try {
+      const res = await fetch('/api/admin/clear-mock-roster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, grade })
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      const d = await res.json();
+      setStatus(status, d.message || 'Mock roster cleared successfully!', true);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
+    }
+    finally { btn.disabled = false; btn.textContent = 'CLEAR'; }
   });
 </script>
 </body>

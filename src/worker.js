@@ -10,6 +10,12 @@ function slugify(name) {
 function uid() {
   return crypto.randomUUID();
 }
+import {
+  handlePopulateMockRoster,
+  handleGetTeams,
+  handleClearMockRoster
+} from './mock-roster-endpoint.js';
+
 var ADMIN_PASSCODE = "94172079";
 var WEB3FORMS_ACCESS_KEY = "a59f79b9-cb63-4cc8-ab40-7465fd609f14";
 async function notifyAdminOfPinRequest(name) {
@@ -144,6 +150,17 @@ export default {
       await notifyAdminOfPinRequest(storedName);
       return json({ ok: true, message: "Request sent! The club admin will verify it's really you before sending your PIN." });
     }
+    if (url.pathname === '/api/admin/populate-mock-roster' && request.method === 'POST') {
+      return handlePopulateMockRoster(request, env);
+    }
+    const teamsMatch = url.pathname.match(/^\/api\/teams\/([a-zA-Z0-9-]+)$/);
+    if (teamsMatch && request.method === 'GET') {
+      return handleGetTeams(request, env, decodeURIComponent(teamsMatch[1]));
+    }
+    if (url.pathname === '/api/admin/clear-mock-roster' && request.method === 'POST') {
+      return handleClearMockRoster(request, env);
+    }
+
     if (url.pathname === "/api/admin/pin-requests" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       if (body.passcode !== ADMIN_PASSCODE) return json({ error: "Invalid passcode" }, 401);
