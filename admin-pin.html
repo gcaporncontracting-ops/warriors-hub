@@ -63,6 +63,25 @@
     <h2>Pending &amp; Recent Requests</h2>
     <div id="requestsList">Loading...</div>
   </div>
+
+  <div class="card" style="border-color: var(--red); box-shadow: 0 0 18px rgba(214, 40, 40, 0.35);">
+    <h2>First Goal Scorer Admin</h2>
+    <p class="sub">Trigger sync or create mock games for the kicker wheel</p>
+    
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">SELECT GRADE</label>
+    <select id="kickerGradeSelect" style="background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px; color: #fff; width:100%; margin-bottom:16px;">
+      <option value="League">League</option>
+      <option value="Reserves">Reserves</option>
+      <option value="Colts">Colts</option>
+      <option value="Thirds">Thirds</option>
+    </select>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <button id="syncKickerBtn" style="background:var(--navy); box-shadow:0 4px 0 #0b1c4d;">Sync PlayHQ</button>
+      <button id="mockKickerBtn" style="background:var(--gold); color:var(--navy); box-shadow:0 4px 0 #b58527;">Create Mock</button>
+    </div>
+    <p class="status" id="kickerStatus"></p>
+  </div>
 </div>
 
 <script>
@@ -151,6 +170,50 @@
     } catch(e) { alert('Network error'); }
   }
   window.denyRequest = denyRequest;
+
+  // --- FIRST GOAL SCORER ADMIN ---
+  const KICKER_API = 'https://clfc-first-goal-scorer.gcaporncontracting.workers.dev';
+
+  document.getElementById('syncKickerBtn').addEventListener('click', async () => {
+    if (!confirm('Trigger manual sync from PlayHQ? This will check for upcoming games and sync rosters.')) return;
+    const btn = document.getElementById('syncKickerBtn');
+    const status = document.getElementById('kickerStatus');
+    btn.disabled = true; btn.textContent = 'Syncing...';
+    setStatus(status, 'Triggering sync...', true);
+
+    try {
+      const res = await fetch(`${KICKER_API}/api/admin/sync-playhq`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE })
+      });
+      const d = await res.json();
+      if (d.ok) setStatus(status, d.message, true);
+      else setStatus(status, d.error, false);
+    } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
+    finally { btn.disabled = false; btn.textContent = 'Sync PlayHQ'; }
+  });
+
+  document.getElementById('mockKickerBtn').addEventListener('click', async () => {
+    const grade = document.getElementById('kickerGradeSelect').value;
+    if (!confirm(`Create a mock game for ${grade}? This will draw 22 players from the voting roster.`)) return;
+    const btn = document.getElementById('mockKickerBtn');
+    const status = document.getElementById('kickerStatus');
+    btn.disabled = true; btn.textContent = 'Creating...';
+    setStatus(status, 'Creating mock game...', true);
+
+    try {
+      const res = await fetch(`${KICKER_API}/api/admin/create-mock-game`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, grade })
+      });
+      const d = await res.json();
+      if (d.ok) setStatus(status, 'Mock game created successfully!', true);
+      else setStatus(status, d.error, false);
+    } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
+    finally { btn.disabled = false; btn.textContent = 'Create Mock'; }
+  });
 </script>
 </body>
 </html>
