@@ -77,8 +77,8 @@
     </select>
 
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-      <button id="syncKickerBtn" style="background:var(--navy); box-shadow:0 4px 0 #0b1c4d;">Sync PlayHQ</button>
-      <button id="mockKickerBtn" style="background:var(--gold); color:var(--navy); box-shadow:0 4px 0 #b58527;">Create Mock</button>
+      <button id="syncKickerBtn" style="background:var(--navy); box-shadow:0 4px 0 #0b1c4d;">SYNC</button>
+      <button id="mockKickerBtn" style="background:var(--gold); color:var(--navy); box-shadow:0 4px 0 #b58527;">MOCK</button>
     </div>
     <p class="status" id="kickerStatus"></p>
   </div>
@@ -191,7 +191,7 @@
       if (d.ok) setStatus(status, d.message, true);
       else setStatus(status, d.error, false);
     } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
-    finally { btn.disabled = false; btn.textContent = 'Sync PlayHQ'; }
+    finally { btn.disabled = false; btn.textContent = 'SYNC'; }
   });
 
   document.getElementById('mockKickerBtn').addEventListener('click', async () => {
@@ -212,7 +212,7 @@
       if (d.ok) setStatus(status, 'Mock game created successfully!', true);
       else setStatus(status, d.error, false);
     } catch(e) { setStatus(status, 'Network error calling kicker API', false); }
-    finally { btn.disabled = false; btn.textContent = 'Create Mock'; }
+    finally { btn.disabled = false; btn.textContent = 'MOCK'; }
   });
 </script>
 </body>
