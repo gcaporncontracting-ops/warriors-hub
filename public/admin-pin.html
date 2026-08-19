@@ -3,358 +3,323 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Warriors Hub — Admin Login</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Warriors Hub — PIN Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #132a6e;
-    --navy-deep: #0b1c4d;
-    --red: #d62828;
-    --blue: #1d4fd8;
-    --gold: #f2b134;
-    --ink: #050810;
+  :root{ --navy:#132a6e; --red:#d62828; --blue:#1d4fd8; --gold:#f2b134; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ font-family:'Work Sans', sans-serif; color:#fff; min-height:100vh; background:#050810; }
+  .wrap{max-width:640px;margin:0 auto;padding:24px 20px 80px;}
+  h1{ font-family:'Anton',sans-serif; text-transform:uppercase; font-size:26px; margin-bottom:4px; }
+  .sub{ opacity:0.6; font-size:13px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; }
+  .card {
+    background: rgba(6, 10, 24, 0.78); border-radius: 16px; padding: 20px;
+    border: 2px solid var(--gold); margin-top: 20px;
+    box-shadow: 0 0 18px rgba(242, 177, 52, 0.35);
   }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; padding: 0;
-    font-family: 'Work Sans', sans-serif;
-    background: var(--ink);
-    color: #fff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .admin-card {
-    width: 100%;
-    max-width: 400px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px;
-    padding: 32px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  }
-  h1 {
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    font-size: 32px;
-    margin: 0 0 8px;
-    letter-spacing: 1px;
-  }
-  p { opacity: 0.6; font-size: 14px; margin-bottom: 24px; }
-  
-  .pin-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  input {
-    background: rgba(255,255,255,0.08);
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 16px;
-    color: #fff;
-    font-size: 18px;
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 4px;
-  }
-  input:focus {
-    outline: none;
-    border-color: var(--blue);
-    background: rgba(255,255,255,0.12);
-  }
-  
+  .card h2 { font-family:'Anton',sans-serif; text-transform:uppercase; font-size:18px; margin:0 0 12px; }
+  input { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px; color: #fff; width:100%; }
   button {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-    border: none;
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    font-size: 18px;
-    cursor: pointer;
-    transition: transform 0.1s, filter 0.2s;
-    background: var(--red);
-    color: #fff;
+    background: var(--red); color:#fff; border:none; border-radius:8px; padding:10px 18px;
+    font-family:'JetBrains Mono',monospace; font-weight:700; cursor:pointer; text-transform:uppercase;
     box-shadow: 0 4px 0 #9c1c1c;
   }
-  button:active { transform: translateY(2px); box-shadow: 0 2px 0 #9c1c1c; }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .back-link {
-    margin-top: 24px;
-    display: inline-block;
-    color: #aaa;
-    text-decoration: none;
-    font-size: 13px;
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: uppercase;
-  }
-  .back-link:hover { color: #fff; }
-
-  /* LOGGED IN VIEW */
-  #adminContent { display: none; width: 100%; max-width: 500px; }
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 20px;
-  }
-  .dash-item {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 20px;
-    text-align: left;
-    text-decoration: none;
-    color: #fff;
-    transition: background 0.2s;
-  }
-  .dash-item:hover { background: rgba(255,255,255,0.1); }
-  .dash-item h3 {
-    font-family: 'Anton', sans-serif;
-    margin: 0 0 4px;
-    text-transform: uppercase;
-    font-size: 20px;
-    color: var(--gold);
-  }
-  .dash-item p { margin: 0; font-size: 13px; opacity: 0.7; }
-
-  /* TEAMS ADMIN PANEL */
-  .teams-admin-card {
-    background: rgba(255,255,255,0.08);
-    border: 2px solid var(--blue);
-    border-radius: 20px;
-    padding: 24px;
-    margin-top: 20px;
-    text-align: left;
-  }
-  .teams-admin-card h2 {
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    margin: 0 0 16px;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .grade-select-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .grade-btn {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 10px 5px;
-    border-radius: 8px;
-    color: #fff;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-align: center;
-  }
-  .grade-btn.active {
-    background: var(--blue);
-    border-color: #fff;
-    font-weight: 700;
-  }
-  .action-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .btn-sync { background: var(--navy); box-shadow: 0 4px 0 var(--navy-deep); }
-  .btn-mock { background: var(--gold); color: var(--navy); box-shadow: 0 4px 0 #b58527; }
-  .btn-clear { 
-    grid-column: span 2;
-    background: rgba(214, 40, 40, 0.2);
-    border: 1px solid var(--red);
-    color: var(--red);
-    box-shadow: none;
-    margin-top: 8px;
-    font-size: 14px;
-  }
-  
-  .status-msg {
-    margin-top: 16px;
-    font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(0,0,0,0.3);
-    display: none;
-  }
+  button:active{ transform:translateY(2px); box-shadow:0 2px 0 #9c1c1c; }
+  button.approve{ background:#2c6e3f; box-shadow:0 4px 0 #17431f; }
+  button.approve:active{ box-shadow:0 2px 0 #17431f; }
+  button.deny{ background:#555; box-shadow:0 4px 0 #333; }
+  button.deny:active{ box-shadow:0 2px 0 #333; }
+  .status{ font-size:12px; margin-top:8px; min-height:14px; }
+  .status.ok{ color:#7fe0a3; }
+  .status.err{ color:#ff8a8a; }
+  .pill{ display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-family:'JetBrains Mono',monospace; text-transform:uppercase; margin-left:6px; }
+  .pill.pending{ background:var(--red); }
+  .pill.approved{ background:#2c6e3f; }
+  .pill.denied{ background:#555; }
+  .req-row{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.08); gap:10px; flex-wrap:wrap; }
+  .req-meta{ font-size:11px; opacity:0.5; font-family:'JetBrains Mono',monospace; margin-top:4px; }
+  .req-actions{ display:flex; gap:8px; }
+  #gate{ max-width:360px; margin:80px auto; text-align:center; }
+  .pin-reveal{ font-family:'JetBrains Mono',monospace; letter-spacing:3px; font-size:18px; color:var(--gold); }
 </style>
 </head>
 <body>
 
-  <!-- LOGIN VIEW -->
-  <div class="admin-card" id="loginCard">
-    <img src="/crest.png" alt="Crest" style="width:80px; margin-bottom:20px;">
-    <h1>Admin Access</h1>
-    <p>Enter the secure passcode to continue</p>
-    
-    <div class="pin-fields">
-      <input type="password" id="adminPass" placeholder="••••••••" maxlength="12">
-      <button id="loginBtn">Unlock Dashboard</button>
-    </div>
-    
-    <a href="/" class="back-link">← Return to Hub</a>
+<div id="gate" class="wrap">
+  <h1>Admin Access</h1>
+  <p class="sub">Enter the admin passcode to review PIN requests</p>
+  <div class="card">
+    <input type="password" id="passcodeInput" placeholder="Passcode" style="margin-bottom:10px;">
+    <button id="unlockBtn" style="width:100%;">Unlock</button>
+    <p class="status err" id="gateStatus"></p>
+  </div>
+</div>
+
+<div id="dashboard" class="wrap" style="display:none;">
+  <h1>PIN Requests</h1>
+  <p class="sub">Cockburn Lakes Warriors Hub</p>
+  <div class="card">
+    <h2>Pending &amp; Recent Requests</h2>
+    <div id="requestsList">Loading...</div>
   </div>
 
-  <!-- DASHBOARD VIEW -->
-  <div id="adminContent">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h1 style="margin:0;">Command Center</h1>
-      <button id="logoutBtn" style="width:auto; padding:8px 16px; font-size:12px; background:rgba(255,255,255,0.1); box-shadow:none;">Logout</button>
-    </div>
+  <div class="card" style="border-color: var(--navy); box-shadow: 0 0 18px rgba(11, 28, 77, 0.35);">
+    <h2>Teams Admin</h2>
+    <p class="sub">Sync the real roster from PlayHQ, or generate/clear a randomised mock squad. Every other worker (FGS wheel, voting, etc) reads this same list automatically — nothing else needs a separate sync.</p>
 
-    <!-- UNIFIED TEAMS ADMIN -->
-    <div class="teams-admin-card">
-      <h2><span style="font-size:28px;">📋</span> Teams Admin</h2>
-      <p style="margin-top:-10px; margin-bottom:15px; font-size:12px;">Sync PlayHQ rosters or generate mock data for all apps (FGS, Voting, Hub).</p>
-      
-      <div class="grade-select-row">
-        <div class="grade-btn active" data-grade="League">League</div>
-        <div class="grade-btn" data-grade="Reserves">Reserves</div>
-        <div class="grade-btn" data-grade="Colts">Colts</div>
-        <div class="grade-btn" data-grade="Thirds">Thirds</div>
-      </div>
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">SELECT GRADE</label>
+    <select id="mockRosterGradeSelect" style="background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px; color: #fff; width:100%; margin-bottom:16px;">
+      <option value="League">League</option>
+      <option value="Reserves">Reserves</option>
+      <option value="Colts">Colts</option>
+      <option value="Thirds">Thirds</option>
+    </select>
 
-      <div class="action-buttons">
-        <button class="btn-sync" id="syncBtn">Sync PlayHQ</button>
-        <button class="btn-mock" id="mockBtn">Generate Mock</button>
-        <button class="btn-clear" id="clearBtn">Clear Active Roster</button>
-      </div>
-      
-      <div id="statusMsg" class="status-msg"></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+      <button id="syncTeamsBtn" style="background:var(--navy); box-shadow:0 4px 0 #0b1c4d; padding:10px 8px; font-size:11px;">SYNC</button>
+      <button id="populateMockBtn" style="background:var(--gold); color:var(--navy); box-shadow:0 4px 0 #b58527; padding:10px 8px; font-size:11px;">GENERATE</button>
+      <button id="clearMockBtn" style="background:var(--red); color:#fff; box-shadow:0 4px 0 #8b1c1c; padding:10px 8px; font-size:11px;">CLEAR</button>
     </div>
-
-    <div class="dashboard-grid">
-      <a href="https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/admin" class="dash-item">
-        <h3>First Goal Scorer</h3>
-        <p>Confirm winners, manage payments, and clear wheel spins.</p>
-      </a>
-      <a href="https://warriors-fines.gcaporncontracting.workers.dev/admin" class="dash-item">
-        <h3>Fines Manager</h3>
-        <p>Review and clear missing training notices.</p>
-      </a>
-      <a href="/pin.html" class="dash-item">
-        <h3>PIN Management</h3>
-        <p>View or reset player access codes.</p>
-      </a>
-    </div>
-
-    <div style="text-align:center; margin-top:30px;">
-      <a href="/" class="back-link">← Back to Hub</a>
-    </div>
+    <p class="status" id="mockRosterStatus"></p>
   </div>
 
-  <script>
-    let currentGrade = 'League';
-    const statusEl = document.getElementById('statusMsg');
+  <div class="card" style="border-color: #2c6e3f; box-shadow: 0 0 18px rgba(44, 110, 63, 0.35);">
+    <h2>Add a Member</h2>
+    <p class="sub">Gives anyone — coach, volunteer, or player — a PIN to use the hub. Does not add them to any roster, team sheet, or voting/wheel list — that only ever comes from PlayHQ sync or a mock roster.</p>
 
-    // Simple auth check
-    const pass = localStorage.getItem('warriors_admin_pass');
-    if (pass) showDashboard();
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">FULL NAME</label>
+    <input type="text" id="newMemberName" placeholder="e.g. Jane Smith" style="margin-bottom:16px;">
 
-    document.getElementById('loginBtn').onclick = () => {
-      const input = document.getElementById('adminPass').value;
-      if (input.length > 3) {
-        localStorage.setItem('warriors_admin_pass', input);
-        showDashboard();
+    <label style="font-size:10px; opacity:0.6; display:block; margin-bottom:6px; font-family:'JetBrains Mono',monospace;">PLAYING GRADE(S) — OPTIONAL</label>
+    <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:16px;">
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Thirds" class="newMemberGrade" style="width:auto;"> Thirds
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Colts" class="newMemberGrade" style="width:auto;"> Colts
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="Reserves" class="newMemberGrade" style="width:auto;"> Reserves
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-size:14px; width:auto;">
+        <input type="checkbox" value="League" class="newMemberGrade" style="width:auto;"> League
+      </label>
+    </div>
+
+    <button id="addMemberBtn" style="width:100%; background:#2c6e3f; box-shadow:0 4px 0 #17431f;">ADD MEMBER</button>
+    <p class="status" id="addMemberStatus"></p>
+  </div>
+</div>
+
+<script>
+  let PASSCODE = '';
+
+  function setStatus(el, msg, ok){ el.textContent = msg; el.className = 'status ' + (ok ? 'ok' : 'err'); }
+
+  document.getElementById('unlockBtn').addEventListener('click', async () => {
+    const pass = document.getElementById('passcodeInput').value.trim();
+    const gateStatus = document.getElementById('gateStatus');
+    if (!pass) return;
+    PASSCODE = pass;
+    const ok = await loadRequests();
+    if (ok) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    } else {
+      setStatus(gateStatus, 'Invalid passcode', false);
+    }
+  });
+
+  async function loadRequests(){
+    const el = document.getElementById('requestsList');
+    try {
+      const res = await fetch('/api/admin/pin-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE })
+      });
+      if (res.status === 401) return false;
+      const data = await res.json();
+      renderRequests(data.requests || []);
+      return true;
+    } catch(e) { el.innerHTML = 'Error loading requests.'; return false; }
+  }
+
+  function renderRequests(requests){
+    const el = document.getElementById('requestsList');
+    if (requests.length === 0) { el.innerHTML = '<p style="opacity:0.5;">No requests yet.</p>'; return; }
+    el.innerHTML = requests.map(r => `
+      <div class="req-row">
+        <div>
+          <b>${r.name}</b>
+          <span class="pill ${r.status}">${r.status}</span>
+          <div class="req-meta">${new Date(r.createdAt).toLocaleString()}</div>
+          ${r.pin ? `<div class="pin-reveal">${r.pin}</div>` : ''}
+        </div>
+        ${r.status === 'pending' ? `
+          <div class="req-actions">
+            <button class="approve" onclick="approveRequest('${r.id}', this)">Approve</button>
+            <button class="deny" onclick="denyRequest('${r.id}')">Deny</button>
+          </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  async function approveRequest(id, btn){
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/admin/approve-pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, requestId: id })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`PIN for this player: ${data.pin}\n\nPass this on to them directly.`);
+        loadRequests();
+      } else {
+        alert(data.error || 'Failed to approve');
+        btn.disabled = false;
       }
-    };
+    } catch(e) { alert('Network error'); btn.disabled = false; }
+  }
+  window.approveRequest = approveRequest;
 
-    document.getElementById('logoutBtn').onclick = () => {
-      localStorage.removeItem('warriors_admin_pass');
-      location.reload();
-    };
+  async function denyRequest(id){
+    try {
+      const res = await fetch('/api/admin/deny-pin-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, requestId: id })
+      });
+      const data = await res.json();
+      if (data.ok) loadRequests(); else alert(data.error || 'Failed to deny');
+    } catch(e) { alert('Network error'); }
+  }
+  window.denyRequest = denyRequest;
 
-    function showDashboard() {
-      document.getElementById('loginCard').style.display = 'none';
-      document.getElementById('adminContent').style.display = 'block';
+  // --- TEAMS ADMIN ---
+  // warriors-sync is now the ONLY worker that talks to PlayHQ (and the
+  // only one with a cron). It writes into the same shared games/players
+  // tables as everything else, so FGS/voting need no sync of their own.
+  const TEAMS_SYNC_API = 'https://warriors-sync.gcaporncontracting.workers.dev';
+
+  document.getElementById('syncTeamsBtn').addEventListener('click', async () => {
+    if (!confirm('Trigger manual sync from PlayHQ? This checks for upcoming games and syncs the real roster into the Teams list.')) return;
+    const btn = document.getElementById('syncTeamsBtn');
+    const status = document.getElementById('mockRosterStatus');
+    btn.disabled = true; btn.textContent = 'Syncing...';
+    setStatus(status, 'Triggering sync...', true);
+
+    try {
+      const res = await fetch(`${TEAMS_SYNC_API}/api/admin/sync-playhq`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE })
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      const d = await res.json();
+      setStatus(status, d.message || 'Sync complete', true);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
     }
+    finally { btn.disabled = false; btn.textContent = 'SYNC'; }
+  });
 
-    // Grade selection
-    document.querySelectorAll('.grade-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentGrade = btn.dataset.grade;
-      };
-    });
+  document.getElementById('populateMockBtn').addEventListener('click', async () => {
+    const grade = document.getElementById('mockRosterGradeSelect').value;
+    if (!confirm(`Generate mock roster for ${grade}?`)) return;
+    const btn = document.getElementById('populateMockBtn');
+    const status = document.getElementById('mockRosterStatus');
+    btn.disabled = true; btn.textContent = 'Generating...';
+    setStatus(status, 'Generating mock roster...', true);
 
-    function showStatus(msg, isError = false) {
-      statusEl.textContent = msg;
-      statusEl.style.display = 'block';
-      statusEl.style.color = isError ? '#ff8a8a' : '#7fe0a3';
-      statusEl.style.border = isError ? '1px solid #ff8a8a' : '1px solid #7fe0a3';
+    try {
+      const res = await fetch('/api/admin/populate-mock-roster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, grade, squadSize: 17, includeSlug: 'gavin-caporn' })
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      const d = await res.json();
+      setStatus(status, d.message || 'Mock roster generated successfully!', true);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
     }
+    finally { btn.disabled = false; btn.textContent = 'GENERATE'; }
+  });
 
-    // Action: SYNC (Calls FGS worker's proven sync endpoint)
-    document.getElementById('syncBtn').onclick = async () => {
-      if (!confirm(`Sync ${currentGrade} roster from PlayHQ?`)) return;
-      const btn = document.getElementById('syncBtn');
-      btn.disabled = true; btn.textContent = 'Syncing...';
-      
-      try {
-        const res = await fetch('https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/api/admin/sync-playhq', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ passcode: localStorage.getItem('warriors_admin_pass'), grade: currentGrade })
-        });
-        const d = await res.json();
-        showStatus(d.ok ? `✓ ${d.message}` : `✗ ${d.error}`, !d.ok);
-      } catch(e) { showStatus('Connection error to FGS worker', true); }
-      finally { btn.disabled = false; btn.textContent = 'Sync PlayHQ'; }
-    };
+  document.getElementById('clearMockBtn').addEventListener('click', async () => {
+    const grade = document.getElementById('mockRosterGradeSelect').value;
+    if (!confirm(`Clear mock roster for ${grade}? This cannot be undone.`)) return;
+    const btn = document.getElementById('clearMockBtn');
+    const status = document.getElementById('mockRosterStatus');
+    btn.disabled = true; btn.textContent = 'Clearing...';
+    setStatus(status, 'Clearing mock roster...', true);
 
-    // Action: GENERATE MOCK (Calls Hub's mock endpoint)
-    document.getElementById('mockBtn').onclick = async () => {
-      if (!confirm(`Generate a mock roster for ${currentGrade}?`)) return;
-      const btn = document.getElementById('mockBtn');
-      btn.disabled = true; btn.textContent = 'Generating...';
-      
-      try {
-        const res = await fetch('/api/admin/populate-mock-roster', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ passcode: localStorage.getItem('warriors_admin_pass'), grade: currentGrade })
-        });
-        const d = await res.json();
-        showStatus(d.ok ? `✓ ${d.message}` : `✗ ${d.error}`, !d.ok);
-      } catch(e) { showStatus('Connection error to Hub API', true); }
-      finally { btn.disabled = false; btn.textContent = 'Generate Mock'; }
-    };
+    try {
+      const res = await fetch('/api/admin/clear-mock-roster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, grade })
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      const d = await res.json();
+      setStatus(status, d.message || 'Mock roster cleared successfully!', true);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
+    }
+    finally { btn.disabled = false; btn.textContent = 'CLEAR'; }
+  });
 
-    // Action: CLEAR
-    document.getElementById('clearBtn').onclick = async () => {
-      if (!confirm(`Clear all active rosters for ${currentGrade}? This will hide players from FGS and Voting until a new sync occurs.`)) return;
-      const btn = document.getElementById('clearBtn');
-      btn.disabled = true;
-      
-      try {
-        const res = await fetch('https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/api/admin/clear-games', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ passcode: localStorage.getItem('warriors_admin_pass'), grade: currentGrade })
-        });
-        const d = await res.json();
-        showStatus(d.ok ? `✓ ${currentGrade} rosters cleared` : `✗ ${d.error}`, !d.ok);
-      } catch(e) { showStatus('Connection error', true); }
-      finally { btn.disabled = false; }
-    };
-  </script>
+  // --- ADD A MEMBER (directory identity / PIN provisioning only) ---
+  document.getElementById('addMemberBtn').addEventListener('click', async () => {
+    const name = document.getElementById('newMemberName').value.trim();
+    const grades = Array.from(document.querySelectorAll('.newMemberGrade:checked')).map(cb => cb.value);
+    const status = document.getElementById('addMemberStatus');
+
+    if (!name) { setStatus(status, 'Enter a full name', false); return; }
+
+    const btn = document.getElementById('addMemberBtn');
+    btn.disabled = true; btn.textContent = 'Adding...';
+    setStatus(status, 'Adding member...', true);
+
+    try {
+      const res = await fetch('/api/admin/add-member', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: PASSCODE, name, grades })
+      });
+      const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));
+      if (!res.ok) {
+        setStatus(status, d.error || `Error ${res.status}`, false);
+        return;
+      }
+      setStatus(status, d.message || `Added ${d.name} — PIN ${d.pin}`, true);
+      document.getElementById('newMemberName').value = '';
+      document.querySelectorAll('.newMemberGrade:checked').forEach(cb => cb.checked = false);
+    } catch(e) {
+      console.error(e);
+      setStatus(status, 'Connection failed: ' + e.message, false);
+    }
+    finally { btn.disabled = false; btn.textContent = 'ADD MEMBER'; }
+  });
+</script>
 </body>
 </html>
