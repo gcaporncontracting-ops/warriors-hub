@@ -209,3 +209,4 @@ export default {
     return env.ASSETS.fetch(request);
   }
 };
+// Asset restoration trigger: Wed Aug 19 06:36:08 UTC 2026
