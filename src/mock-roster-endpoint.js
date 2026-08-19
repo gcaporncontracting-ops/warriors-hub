@@ -120,10 +120,17 @@ export async function handlePopulateMockRoster(request, env) {
 
   try {
     // 1. Create the mock game fixture.
+    // Kickoff must be in the future, not "now" — /api/games/current
+    // auto-locks any game the instant Date.now() >= game_date_time, so
+    // stamping this with the creation time locked every mock roster
+    // within seconds of being created. Six hours gives admins a
+    // realistic testing window before it locks on its own (same fix
+    // FGS's own create-mock-game already had).
+    const kickoff = new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString();
     await env.DB.prepare(
       `INSERT INTO games (id, grade, home_team, away_team, game_date_time, status, is_mock)
-       VALUES (?, ?, 'Warriors', 'Randomised Mock Opposition', datetime('now'), 'open', 1)`
-    ).bind(gameId, grade).run();
+       VALUES (?, ?, 'Warriors', 'Randomised Mock Opposition', ?, 'open', 1)`
+    ).bind(gameId, grade, kickoff).run();
 
     let addedCount = 0;
 
