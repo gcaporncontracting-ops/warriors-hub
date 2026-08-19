@@ -220,6 +220,23 @@
     color:rgba(255,255,255,.65); text-transform:uppercase;
   }
 </style>
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => {
+            console.log('✓ Service Worker registered', reg);
+            setInterval(() => {
+              reg.update();
+            }, 60000);
+          })
+          .catch(err => {
+            console.warn('✗ Service Worker registration failed:', err);
+          });
+      });
+    }
+  </script>
 </head>
 <body>
 
