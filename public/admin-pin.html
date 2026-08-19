@@ -244,7 +244,7 @@
       const res = await fetch('/api/admin/populate-mock-roster', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passcode: PASSCODE, grade, squadSize: 17, includeSlug: 'gavin-caporn' })
+        body: JSON.stringify({ passcode: PASSCODE, grade, squadSize: 22, includeSlug: 'gavin-caporn' })
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({ error: `Server error: ${res.status}` }));

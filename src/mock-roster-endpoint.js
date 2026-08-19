@@ -61,7 +61,7 @@ function uid() {
  * {
  *   "passcode": "Warriors-YE8899UE",   // required
  *   "grade": "Thirds",                 // required — must match a grade string used in player_directory.grades / games.grade
- *   "squadSize": 17,                   // optional, default 17
+ *   "squadSize": 22,                   // optional, default 22
  *   "includeSlug": "gavin-caporn",     // optional — guarantees this player a spot
  *   "force": false                     // optional — allow creating a new mock game even if an open one exists for this grade
  * }
@@ -76,7 +76,7 @@ export async function handlePopulateMockRoster(request, env) {
     return json({ error: "Invalid JSON body" }, 400);
   }
 
-  const { passcode, grade, squadSize = 17, includeSlug, force = false } = body;
+  const { passcode, grade, squadSize = 22, includeSlug, force = false } = body;
 
   if (passcode !== ADMIN_PASSCODE) {
     return json({ error: "Invalid passcode" }, 401);
