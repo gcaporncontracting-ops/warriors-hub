@@ -1,0 +1,25 @@
+name = "warriors-hub"
+main = "src/worker-fgs-integrated.js"
+compatibility_date = "2026-08-08"
+
+[env.production]
+routes = [
+  { pattern = "warriors-hub.YOUR_ACCOUNT.workers.dev/*", zone_id = "" }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "NOTICE_KV"
+id = "3422755a01514d2f884dc8e6db5e57ad"
+
+[[kv_namespaces]]
+binding = "VOTES_KV"
+id = "5484efe25986416ca14a9072c6b841dd"
+
+[[d1_databases]]
+binding = "DB"
+database_id = "b97a943b-eb7f-4e4b-8c11-13d530a4fe72"
+database_name = "clfc-first-goal-scorer"
