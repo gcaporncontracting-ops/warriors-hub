@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Warriors Hub — First Goal Scorer</title>
+<title>Warriors Hub — First Goal</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0b1c4d">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Warriors Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -18,6 +19,8 @@
     --red:#d62828;
     --blue:#1d4fd8;
     --gold:#f2b134;
+    --ink:#14161c;
+    --paper:#ffffff;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -32,15 +35,15 @@
     background-attachment:fixed;
     background-repeat:no-repeat;
   }
-  .wrap{max-width:600px;margin:0 auto;padding:0 20px 80px;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px;}
   header.top{
     text-align:center;
-    padding:20px 0;
+    padding:10px 0 20px;
     color:#fff;
   }
   .hero-banner{
     width:100%;
-    max-width:200px;
+    max-width:480px;
     margin:0 auto;
   }
   .hero-banner img{
@@ -49,59 +52,63 @@
     border-radius:10px;
   }
 
-  .ctt-card {
-    background: rgba(6, 10, 24, 0.78);
-    border-radius: 16px;
-    padding: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.8);
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
     margin-top: 20px;
-    box-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
+    width: 100%;
   }
-  .ctt-card h2 {
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    background: transparent;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.12s;
+    position: relative;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card img {
+    width: 100%;
+    height: auto;
+    max-height: 85%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .card span {
     font-family: 'Anton', sans-serif;
     text-transform: uppercase;
-    font-size: 20px;
-    margin: 0 0 12px;
-  }
-  .ctt-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .ctt-row input, .ctt-row textarea {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
-    padding: 10px;
+    font-size: 16px;
+    letter-spacing: 0.05em;
     color: #fff;
-    font-family: 'Work Sans', sans-serif;
+    margin-top: 8px;
   }
-  .ctt-submit {
-    background: var(--red);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 0 #9c1c1c;
-    text-transform: uppercase;
-  }
-  .ctt-submit:active { transform: translateY(2px); box-shadow: 0 2px 0 #9c1c1c; }
-  .ctt-status { font-size: 12px; margin-top: 8px; }
-  .ctt-status.ok { color: #7fe0a3; }
-  .ctt-status.err { color: #ff8a8a; }
 
-  /* FGS Styles */
-  .wheel-container { margin: 30px 0; text-align: center; }
-  .wheel-pointer { position: relative; height: 30px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: -15px; z-index: 10; }
-  .wheel-pointer::before { content: ""; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #333; }
-  .wheel { width: 280px; height: 280px; margin: 0 auto; border-radius: 50%; background: conic-gradient(#FF6B6B 0deg 18deg, #4ECDC4 18deg 36deg, #45B7D1 36deg 54deg, #FFA07A 54deg 72deg, #98D8C8 72deg 90deg, #F7DC6F 90deg 108deg, #BB8FCE 108deg 126deg, #85C1E2 126deg 144deg, #F8B88B 144deg 162deg, #A8E6CF 162deg 180deg, #FFD3B6 180deg 198deg, #FFAAA5 198deg 216deg, #FF8B94 216deg 234deg, #A8D8EA 234deg 252deg, #AA96DA 252deg 270deg, #FCBAD3 270deg 288deg, #A1CCFD 288deg 306deg, #F2CCFF 306deg 324deg, #B5EAD7 324deg 342deg, #FFFFD2 342deg 360deg); border: 5px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: spin var(--spin-duration, 0s) ease-out forwards; }
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(var(--spin-rotation, 360deg)); } }
-  .spin-button { width: 100%; padding: 14px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-  .spin-button:hover { transform: translateY(-2px); }
-  .spin-button:disabled { opacity: 0.5; cursor: not-allowed; }
-  .winner-display { text-align: center; margin: 20px 0; padding: 30px; background: #fff3cd; border-radius: 12px; display: none; border: 2px solid #ffc107; }
-  .winner-display.show { display: block; }
-  .winner-name { font-size: 36px; font-weight: bold; color: #d62828; margin: 15px 0; }
+  footer{
+    text-align:center;
+    padding:60px 0;
+    opacity:0.4;
+    font-size:12px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  footer a { color:inherit; text-decoration:none; }
 </style>
 </head>
 <body>
@@ -109,136 +116,32 @@
 <div class="wrap">
   <header class="top">
     <div class="hero-banner">
-      <img src="/crest.png" alt="Warriors Crest">
+      <img src="/hero.jpg" alt="Warriors Player Hub">
     </div>
-    <h1 style="font-family:'Anton',sans-serif; font-size:28px; margin-top:10px; text-transform:uppercase;">Warriors Hub</h1>
   </header>
 
-  <!-- REQUEST PIN SECTION -->
-  <div class="ctt-card">
-    <h2>Request PIN</h2>
-    <div class="ctt-row" style="align-items: stretch;">
-      <input type="tel" id="pinInput" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN" style="height: auto;">
-      <button type="button" class="ctt-submit" id="pinSubmit">Submit</button>
-    </div>
-    <p class="ctt-status" id="pinStatus"></p>
+  <!-- MAIN GRID (ONLY FGS AND REQUEST PIN) -->
+  <div class="grid">
+    
+    <!-- Card 1: First Goal -->
+    <a class="card" href="/">
+      <img src="icon-fgs.png" alt="Goal">
+      <span>First Goal</span>
+    </a>
+
+    <!-- Card 2: Request PIN -->
+    <a class="card" href="/pin.html">
+      <img src="icon-pinchange.png" alt="PIN">
+      <span>Request PIN</span>
+    </a>
+
   </div>
 
-  <!-- FIRST GOAL SCORER SECTION -->
-  <div class="ctt-card">
-    <h2>First Goal Scorer</h2>
-    
-    <div class="wheel-container">
-      <div class="wheel-pointer"></div>
-      <div class="wheel" id="wheel"></div>
-    </div>
-    
-    <button class="spin-button" id="spinBtn" onclick="spin()" disabled>🎡 SPIN THE WHEEL</button>
-    
-    <div class="winner-display" id="winnerDisplay">
-      <div style="font-size:24px;">🎉 FIRST GOAL SCORER 🎉</div>
-      <div class="winner-name" id="winnerName"></div>
-      <div style="font-size:14px; margin-top:10px;">$5 Entry Fee</div>
-    </div>
-  </div>
-
+  <footer>
+    &copy; 2026 Cockburn Lakes Warriors Hub<br>
+    <a href="/admin-pin.html">ADMIN LOGIN</a>
+  </footer>
 </div>
-
-<script>
-  let currentPlayers = [];
-  let spinning = false;
-
-  // Load players on page load
-  async function loadPlayers() {
-    try {
-      const res = await fetch('/teams?grade=League');
-      const data = await res.json();
-      currentPlayers = data.players || [];
-      renderWheel();
-      document.getElementById('spinBtn').disabled = false;
-    } catch (err) {
-      console.error('Error loading players:', err);
-    }
-  }
-
-  function renderWheel() {
-    const wheel = document.getElementById('wheel');
-    const count = currentPlayers.length;
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B88B', '#A8E6CF', '#FFD3B6', '#FFAAA5', '#FF8B94', '#A8D8EA', '#AA96DA', '#FCBAD3', '#A1CCFD', '#F2CCFF', '#B5EAD7', '#FFFFD2'];
-    const gradient = currentPlayers.map((p, i) => {
-      const start = (i / count) * 360;
-      const end = ((i + 1) / count) * 360;
-      const color = colors[i % colors.length];
-      return `${color} ${start}deg ${end}deg`;
-    }).join(', ');
-    wheel.style.background = `conic-gradient(${gradient})`;
-  }
-
-  function spin() {
-    if (spinning || currentPlayers.length === 0) return;
-    spinning = true;
-    document.getElementById('spinBtn').disabled = true;
-    document.getElementById('winnerDisplay').classList.remove('show');
-
-    const wheel = document.getElementById('wheel');
-    const spinDuration = 3.5;
-    const randomRotation = Math.random() * 360 + 1440;
-    const segmentSize = 360 / currentPlayers.length;
-    const selectedIndex = Math.floor((randomRotation % 360) / segmentSize) % currentPlayers.length;
-    const winner = currentPlayers[selectedIndex];
-
-    wheel.style.animation = 'none';
-    wheel.offsetHeight;
-
-    wheel.style.setProperty('--spin-duration', `${spinDuration}s`);
-    wheel.style.setProperty('--spin-rotation', `${randomRotation}deg`);
-    wheel.style.animation = `spin ${spinDuration}s ease-out forwards`;
-
-    setTimeout(() => {
-      document.getElementById('winnerName').textContent = winner.name;
-      document.getElementById('winnerDisplay').classList.add('show');
-      spinning = false;
-      document.getElementById('spinBtn').disabled = false;
-    }, spinDuration * 1000);
-  }
-
-  // PIN handling
-  document.getElementById('pinSubmit').addEventListener('click', async () => {
-    const input = document.getElementById('pinInput');
-    const status = document.getElementById('pinStatus');
-    const pin = input.value.trim();
-    
-    if (!/^\d{4}$/.test(pin)) { 
-      status.textContent = 'Enter 4-digit PIN'; 
-      status.className = 'ctt-status err'; 
-      return; 
-    }
-    
-    status.textContent = 'Submitting...';
-    try {
-      const res = await fetch('/api/notice/post', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ pin })
-      });
-      if (res.ok) {
-        input.value = '';
-        status.textContent = 'Submitted!';
-        status.className = 'ctt-status ok';
-      } else {
-        const d = await res.json();
-        status.textContent = d.error || 'Error';
-        status.className = 'ctt-status err';
-      }
-    } catch(e) {
-      status.textContent = 'Network error';
-      status.className = 'ctt-status err';
-    }
-  });
-
-  // Load players on page load
-  loadPlayers();
-</script>
 
 </body>
 </html>
