@@ -1,5 +1,5 @@
 name = "warriors-hub"
-main = "src/worker-fgs-integrated.js"
+main = "src/worker.js"
 compatibility_date = "2026-08-08"
 
 [env.production]
