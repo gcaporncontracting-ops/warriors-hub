@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cockburn Lakes Warriors — Members Hub</title>
+<title>Warriors Hub — First Goal Scorer</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0b1c4d">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Warriors Hub">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -19,8 +18,6 @@
     --red:#d62828;
     --blue:#1d4fd8;
     --gold:#f2b134;
-    --ink:#14161c;
-    --paper:#ffffff;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -35,15 +32,15 @@
     background-attachment:fixed;
     background-repeat:no-repeat;
   }
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  .wrap{max-width:600px;margin:0 auto;padding:0 20px 80px;}
   header.top{
     text-align:center;
-    padding:10px 0 20px;
+    padding:20px 0;
     color:#fff;
   }
   .hero-banner{
     width:100%;
-    max-width:480px;
+    max-width:200px;
     margin:0 auto;
   }
   .hero-banner img{
@@ -52,87 +49,6 @@
     border-radius:10px;
   }
 
-  /* --- CLEAN GRID SYSTEM --- */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-top: 20px;
-    width: 100%;
-  }
-
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    background: transparent; /* REMOVED BACKGROUND */
-    border: none !important; /* REMOVED OUTER BORDER */
-    box-shadow: none !important; /* REMOVED GLOW/SHADOW */
-    padding: 0; /* REMOVED PADDING FOR MAX SIZE */
-    text-decoration: none;
-    color: #fff;
-    transition: transform 0.12s;
-    position: relative;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-  }
-
-  /* --- ICONS MAXIMIZED --- */
-  .card img {
-    width: 100%;
-    height: auto;
-    max-height: 85%;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .card span {
-    font-family: 'Anton', sans-serif;
-    text-transform: uppercase;
-    font-size: 16px;
-    letter-spacing: 0.05em;
-    color: #fff;
-    margin-top: 8px;
-  }
-
-  /* --- DROPDOWN LOGIC --- */
-  .grade-options {
-    position: absolute;
-    inset: 0;
-    background: rgba(6, 10, 24, 0.98);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 12px;
-    gap: 8px;
-    z-index: 10;
-  }
-  .grade-options[hidden] { display: none; }
-  .grade-options a {
-    display: block;
-    text-decoration: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 13px;
-    text-transform: uppercase;
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  .grade-options a:nth-child(odd) { background: var(--red); }
-  .grade-options a:nth-child(even) { background: var(--blue); }
-
-  /* --- STANDALONE SECTIONS --- */
   .ctt-card {
     background: rgba(6, 10, 24, 0.78);
     border-radius: 16px;
@@ -148,7 +64,7 @@
     margin: 0 0 12px;
   }
   .ctt-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .ctt-row input, .ctt-row textarea, .pin-fields input {
+  .ctt-row input, .ctt-row textarea {
     flex: 1;
     background: rgba(255, 255, 255, 0.08);
     border: 1.5px solid rgba(255, 255, 255, 0.25);
@@ -174,280 +90,155 @@
   .ctt-status.ok { color: #7fe0a3; }
   .ctt-status.err { color: #ff8a8a; }
 
-  /* --- NOTICE BOARD --- */
-  .notice-board { margin-top: 26px; }
-  .notice-item {
-    display: flex;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-  .notice-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.6; }
-
-  /* --- OVERLAYS --- */
-  .install-splash, .tutorial-splash {
-    position: fixed; inset: 0; z-index: 1000;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: var(--navy-deep); padding: 32px; text-align: center;
-  }
-  .install-splash[hidden], .tutorial-splash[hidden] { display: none; }
-  .tutorial-splash { background: rgba(5, 8, 16, 0.96); }
-  .tutorial-dot { width: 8px; height: 8px; background: #555; border-radius: 50%; display: inline-block; margin: 0 4px; }
-  .tutorial-dot.active { background: var(--red); width: 20px; border-radius: 4px; }
-
-  .tutorial-help-btn {
-    position: fixed; bottom: 20px; right: 82px; z-index: 50;
-    width: 44px; height: 44px; border-radius: 50%;
-    background: var(--navy); border: 2px solid var(--blue); color: #fff;
-    font-weight: 700; cursor: pointer;
-  }
-  .admin-fab{
-    position:fixed; bottom:18px; right:18px; z-index:60;
-    width:58px; height:58px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(6,10,24,.78); border:1px solid rgba(255,255,255,.25);
-    box-shadow:0 4px 20px rgba(0,0,0,.55); backdrop-filter:blur(8px);
-    cursor:pointer; transition:transform .2s, background .2s;
-  }
-  .admin-fab:hover{transform:scale(1.08);background:rgba(6,10,24,.95);}
-  .admin-fab img{width:44px;height:44px;object-fit:contain;}
-  .admin-fab-label{
-    position:absolute; right:0; bottom:-18px; white-space:nowrap;
-    font:700 9px 'JetBrains Mono',monospace; letter-spacing:.05em;
-    color:rgba(255,255,255,.65); text-transform:uppercase;
-  }
+  /* FGS Styles */
+  .wheel-container { margin: 30px 0; text-align: center; }
+  .wheel-pointer { position: relative; height: 30px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: -15px; z-index: 10; }
+  .wheel-pointer::before { content: ""; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #333; }
+  .wheel { width: 280px; height: 280px; margin: 0 auto; border-radius: 50%; background: conic-gradient(#FF6B6B 0deg 18deg, #4ECDC4 18deg 36deg, #45B7D1 36deg 54deg, #FFA07A 54deg 72deg, #98D8C8 72deg 90deg, #F7DC6F 90deg 108deg, #BB8FCE 108deg 126deg, #85C1E2 126deg 144deg, #F8B88B 144deg 162deg, #A8E6CF 162deg 180deg, #FFD3B6 180deg 198deg, #FFAAA5 198deg 216deg, #FF8B94 216deg 234deg, #A8D8EA 234deg 252deg, #AA96DA 252deg 270deg, #FCBAD3 270deg 288deg, #A1CCFD 288deg 306deg, #F2CCFF 306deg 324deg, #B5EAD7 324deg 342deg, #FFFFD2 342deg 360deg); border: 5px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: spin var(--spin-duration, 0s) ease-out forwards; }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(var(--spin-rotation, 360deg)); } }
+  .spin-button { width: 100%; padding: 14px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+  .spin-button:hover { transform: translateY(-2px); }
+  .spin-button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .winner-display { text-align: center; margin: 20px 0; padding: 30px; background: #fff3cd; border-radius: 12px; display: none; border: 2px solid #ffc107; }
+  .winner-display.show { display: block; }
+  .winner-name { font-size: 36px; font-weight: bold; color: #d62828; margin: 15px 0; }
 </style>
-  <!-- PWA Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js', { scope: '/' })
-          .then(reg => {
-            console.log('✓ Service Worker registered', reg);
-            setInterval(() => {
-              reg.update();
-            }, 60000);
-          })
-          .catch(err => {
-            console.warn('✗ Service Worker registration failed:', err);
-          });
-      });
-    }
-  </script>
 </head>
 <body>
-
-<!-- Install Splash -->
-<div class="install-splash" id="installSplash">
-  <img src="/crest.png" alt="Warriors Crest" style="width:120px; margin-bottom:20px;">
-  <p style="font-family:'Anton',sans-serif; font-size:32px; margin:0; text-transform:uppercase;">Warriors Hub</p>
-  <p id="installSubtext" style="opacity:0.8; margin: 10px 0 20px;">Add this to your home screen for quick access.</p>
-  <button type="button" class="ctt-submit" id="installBtn" style="padding:15px 40px;">Install App</button>
-  <button type="button" id="installLater" style="background:none; border:none; color:#aaa; text-decoration:underline; margin-top:20px; cursor:pointer;">Maybe later</button>
-</div>
-
-<!-- Tutorial Splash -->
-<div class="tutorial-splash" id="tutorialSplash" hidden>
-  <div style="max-width:320px;">
-    <div id="tutorialIconWrap" style="font-size:50px; margin-bottom:20px;"></div>
-    <h2 id="tutorialTitle" style="font-family:'Anton',sans-serif; text-transform:uppercase; font-size:28px;"></h2>
-    <p id="tutorialText" style="opacity:0.8; line-height:1.6; margin-bottom:30px;"></p>
-    <div id="tutorialDots" style="margin-bottom:20px;"></div>
-    <button type="button" class="ctt-submit" id="tutorialNext" style="width:100%;">Next</button>
-  </div>
-</div>
-
-<button type="button" class="tutorial-help-btn" id="tutorialHelpBtn">?</button>
-
-<a class="admin-fab" href="/admin-pin.html" aria-label="Open admin hub" title="Admin Hub">
-  <img src="/admin-teepee.png" alt="Admin Hub">
-  <span class="admin-fab-label">Admin</span>
-</a>
 
 <div class="wrap">
   <header class="top">
     <div class="hero-banner">
-      <img src="/hero.jpg" alt="Warriors Player Hub">
+      <img src="/crest.png" alt="Warriors Crest">
     </div>
+    <h1 style="font-family:'Anton',sans-serif; font-size:28px; margin-top:10px; text-transform:uppercase;">Warriors Hub</h1>
   </header>
 
-  <!-- Training Status Section -->
-  <div class="ctt-card" id="cantMakeTrainingCard">
-    <h2>Can't make training?</h2>
+  <!-- REQUEST PIN SECTION -->
+  <div class="ctt-card">
+    <h2>Request PIN</h2>
     <div class="ctt-row" style="align-items: stretch;">
-      <input type="tel" id="cttPin" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN" style="height: auto;">
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <a href="https://clfc-training-wheel.gcaporncontracting.workers.dev/" class="ctt-submit" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; background: var(--blue); box-shadow: 0 4px 0 #132a6e;">Wheel</a>
-        <button type="button" class="ctt-submit" id="cttSubmit">Post</button>
-      </div>
+      <input type="tel" id="pinInput" inputmode="numeric" maxlength="4" placeholder="Enter 4-digit PIN" style="height: auto;">
+      <button type="button" class="ctt-submit" id="pinSubmit">Submit</button>
     </div>
-    <p class="ctt-status" id="cttStatus"></p>
+    <p class="ctt-status" id="pinStatus"></p>
   </div>
 
-  <!-- MAIN 2x2 GRID (FLOATING ICONS) -->
-  <div class="grid">
+  <!-- FIRST GOAL SCORER SECTION -->
+  <div class="ctt-card">
+    <h2>First Goal Scorer</h2>
     
-    <!-- Card 1: Fines -->
-    <a class="card" href="https://warriors-fines.gcaporncontracting.workers.dev/">
-      <img src="/icon-fines.png" alt="Fines">
-      <span>Fines Wall</span>
-    </a>
-
-    <!-- Card 2: Vote (now links to its own selection page) -->
-    <a class="card" href="/vote.html">
-      <img src="/icon-vote.png" alt="Vote">
-      <span>Vote</span>
-    </a>
-
-    <!-- Card 3: Idea -->
-    <a class="card" href="/suggestion.html">
-      <img src="icon-suggestion.png" alt="Idea">
-      <span>Suggestion</span>
-    </a>
-
-    <!-- Card 4: First Goal -->
-    <a class="card" href="https://clfc-first-goal-scorer.gcaporncontracting.workers.dev/">
-      <img src="icon-fgs.png" alt="Goal">
-      <span>First Goal</span>
-    </a>
-
-    <!-- Card 5: Teams (now links to its own selection page) -->
-    <a class="card" href="/teams.html">
-      <img src="icon-team.png" alt="Teams">
-      <span>Teams</span>
-    </a>
-
-    <!-- Card 6: Pin Change -->
-<a class="card" href="/pin.html">
-  <img src="icon-pinchange.png" alt="PIN">
-  <span>Request PIN</span>
-</a>
-
-    <!-- Card 7: Training Wheel -->
-    <a class="card" href="https://clfc-training-wheel-production.gcaporncontracting.workers.dev">
-      <img src="/training-wheel.png" alt="Training Wheel">
-      <span>Training Wheel</span>
-    </a>
-
-    <!-- Card 8: Cobras -->
-    <a class="card" href="/loading.png">
-      <img src="/cobra.png" alt="">
-      <span></span>
-    </a>
-
+    <div class="wheel-container">
+      <div class="wheel-pointer"></div>
+      <div class="wheel" id="wheel"></div>
+    </div>
+    
+    <button class="spin-button" id="spinBtn" onclick="spin()" disabled>🎡 SPIN THE WHEEL</button>
+    
+    <div class="winner-display" id="winnerDisplay">
+      <div style="font-size:24px;">🎉 FIRST GOAL SCORER 🎉</div>
+      <div class="winner-name" id="winnerName"></div>
+      <div style="font-size:14px; margin-top:10px;">$5 Entry Fee</div>
+    </div>
   </div>
 
-  <!-- Notice Board -->
-  <div class="ctt-card notice-board">
-    <h2>Notice Board</h2>
-    <p style="font-size:11px; opacity:0.5; margin-top:-10px; margin-bottom:15px; font-family:'JetBrains Mono',monospace;">Recent flags for missing training</p>
-    <div id="noticeList"></div>
-    <button type="button" id="noticeManageLink" onclick="window.location.href='/admin-pin.html'" style="background:none; border:none; color:#aaa; font-size:10px; text-decoration:underline; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Manage notices</button>
-  </div>
-
-
-
-
-  </div>
-
-  <footer style="text-align:center; padding:60px 0; opacity:0.4; font-size:12px; font-family:'JetBrains Mono',monospace;">
-    &copy; 2026 Cockburn Lakes Warriors Hub<br>
-    <a href="/admin-pin.html" style="color:inherit; text-decoration:none; margin-top:10px; display:inline-block;">ADMIN LOGIN</a>
-  </footer>
 </div>
 
 <script>
-  // --- TRAINING NOTICE LOGIC ---
-  function currentNoticePeriodKey(){
-    const d = new Date(); d.setHours(0,0,0,0);
-    for(let i=0; i<7; i++){
-      const day = d.getDay();
-      if(day===3 || day===5){
-        const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
-        return `${y}-${m}-${dd}`;
-      }
-      d.setDate(d.getDate()-1);
-    }
-    return 'fallback';
-  }
-  const NOTICE_KEY = `cant_make_training:${currentNoticePeriodKey()}`;
+  let currentPlayers = [];
+  let spinning = false;
 
-  async function renderNoticeBoard(){
-    const noticeList = document.getElementById('noticeList');
+  // Load players on page load
+  async function loadPlayers() {
     try {
-      const res = await fetch(`/api/store?key=${NOTICE_KEY}`);
-      const list = await res.json();
-      const recent = (Array.isArray(list) ? list : []).slice(-20).reverse();
-      if (recent.length === 0){
-        noticeList.innerHTML = '<p style="opacity:0.5; font-style:italic;">No notices yet.</p>';
-      } else {
-        noticeList.innerHTML = recent.map(n => `
-          <div class="notice-item">
-            <span><b>${n.name}</b> can't make training</span>
-            <span class="notice-date">${new Date(n.ts).toLocaleDateString()}</span>
-          </div>
-        `).join('');
-      }
-    } catch(e) { noticeList.innerHTML = 'Error loading notices.'; }
+      const res = await fetch('/teams?grade=League');
+      const data = await res.json();
+      currentPlayers = data.players || [];
+      renderWheel();
+      document.getElementById('spinBtn').disabled = false;
+    } catch (err) {
+      console.error('Error loading players:', err);
+    }
   }
-  renderNoticeBoard();
 
-  document.getElementById('cttSubmit').addEventListener('click', async () => {
-    const input = document.getElementById('cttPin'), status = document.getElementById('cttStatus'), btn = document.getElementById('cttSubmit');
+  function renderWheel() {
+    const wheel = document.getElementById('wheel');
+    const count = currentPlayers.length;
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B88B', '#A8E6CF', '#FFD3B6', '#FFAAA5', '#FF8B94', '#A8D8EA', '#AA96DA', '#FCBAD3', '#A1CCFD', '#F2CCFF', '#B5EAD7', '#FFFFD2'];
+    const gradient = currentPlayers.map((p, i) => {
+      const start = (i / count) * 360;
+      const end = ((i + 1) / count) * 360;
+      const color = colors[i % colors.length];
+      return `${color} ${start}deg ${end}deg`;
+    }).join(', ');
+    wheel.style.background = `conic-gradient(${gradient})`;
+  }
+
+  function spin() {
+    if (spinning || currentPlayers.length === 0) return;
+    spinning = true;
+    document.getElementById('spinBtn').disabled = true;
+    document.getElementById('winnerDisplay').classList.remove('show');
+
+    const wheel = document.getElementById('wheel');
+    const spinDuration = 3.5;
+    const randomRotation = Math.random() * 360 + 1440;
+    const segmentSize = 360 / currentPlayers.length;
+    const selectedIndex = Math.floor((randomRotation % 360) / segmentSize) % currentPlayers.length;
+    const winner = currentPlayers[selectedIndex];
+
+    wheel.style.animation = 'none';
+    wheel.offsetHeight;
+
+    wheel.style.setProperty('--spin-duration', `${spinDuration}s`);
+    wheel.style.setProperty('--spin-rotation', `${randomRotation}deg`);
+    wheel.style.animation = `spin ${spinDuration}s ease-out forwards`;
+
+    setTimeout(() => {
+      document.getElementById('winnerName').textContent = winner.name;
+      document.getElementById('winnerDisplay').classList.add('show');
+      spinning = false;
+      document.getElementById('spinBtn').disabled = false;
+    }, spinDuration * 1000);
+  }
+
+  // PIN handling
+  document.getElementById('pinSubmit').addEventListener('click', async () => {
+    const input = document.getElementById('pinInput');
+    const status = document.getElementById('pinStatus');
     const pin = input.value.trim();
-    if (!/^\d{4}$/.test(pin)) { status.textContent = 'Enter 4-digit PIN'; status.className='ctt-status err'; return; }
-    btn.disabled = true; status.textContent = 'Posting...';
+    
+    if (!/^\d{4}$/.test(pin)) { 
+      status.textContent = 'Enter 4-digit PIN'; 
+      status.className = 'ctt-status err'; 
+      return; 
+    }
+    
+    status.textContent = 'Submitting...';
     try {
       const res = await fetch('/api/notice/post', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ pin, noticeKey: NOTICE_KEY })
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ pin })
       });
       if (res.ok) {
-        input.value = ''; status.textContent = 'Posted!'; status.className = 'ctt-status ok';
-        renderNoticeBoard();
+        input.value = '';
+        status.textContent = 'Submitted!';
+        status.className = 'ctt-status ok';
       } else {
-        const d = await res.json(); status.textContent = d.error || 'Error'; status.className = 'ctt-status err';
+        const d = await res.json();
+        status.textContent = d.error || 'Error';
+        status.className = 'ctt-status err';
       }
-    } catch(e) { status.textContent = 'Network error'; } finally { btn.disabled = false; }
+    } catch(e) {
+      status.textContent = 'Network error';
+      status.className = 'ctt-status err';
+    }
   });
 
-
-
-  // --- INSTALL SPLASH ---
-  const splash = document.getElementById('installSplash');
-  if (window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('installSplashDismissed') === 'yes') {
-    splash.setAttribute('hidden', '');
-  }
-  document.getElementById('installBtn').addEventListener('click', () => { localStorage.setItem('installSplashDismissed', 'yes'); splash.setAttribute('hidden', ''); });
-  document.getElementById('installLater').addEventListener('click', () => { localStorage.setItem('installSplashDismissed', 'yes'); splash.setAttribute('hidden', ''); });
-
-  // --- TUTORIAL ---
-  const tutorialSteps = [
-    { icon: '/crest.png', title: 'Welcome!', text: 'One hub for fines, votes, and fixtures.' },
-    { icon: '/icon-fines.png', title: 'Fines Wall', text: 'Nominate teammates and check who owes what.' },
-    { icon: '/icon-vote.png', title: "Player's Player", text: 'Vote each week. PIN is 0000 while testing.' },
-    { emoji: '🙋', title: "Notice Board", text: 'Flag if you cant make training.' }
-  ];
-  let tutorialIndex = 0;
-  function renderTutorialStep(){
-    const step = tutorialSteps[tutorialIndex];
-    const iconWrap = document.getElementById('tutorialIconWrap');
-    iconWrap.innerHTML = step.icon ? `<img src="${step.icon}" style="width:100px;">` : step.emoji;
-    document.getElementById('tutorialTitle').textContent = step.title;
-    document.getElementById('tutorialText').textContent = step.text;
-    document.getElementById('tutorialDots').innerHTML = tutorialSteps.map((_, i) => `<span class="tutorial-dot${i === tutorialIndex ? ' active' : ''}"></span>`).join('');
-  }
-  document.getElementById('tutorialNext').addEventListener('click', () => {
-    if (tutorialIndex < tutorialSteps.length - 1){ tutorialIndex++; renderTutorialStep(); }
-    else { document.getElementById('tutorialSplash').setAttribute('hidden', ''); localStorage.setItem('hubTutorialSeen', 'yes'); }
-  });
-  document.getElementById('tutorialHelpBtn').addEventListener('click', () => { tutorialIndex = 0; renderTutorialStep(); document.getElementById('tutorialSplash').removeAttribute('hidden'); });
-  if (localStorage.getItem('hubTutorialSeen') !== 'yes' && splash.hasAttribute('hidden')) {
-    setTimeout(() => { tutorialIndex = 0; renderTutorialStep(); document.getElementById('tutorialSplash').removeAttribute('hidden'); }, 1000);
-  }
+  // Load players on page load
+  loadPlayers();
 </script>
+
 </body>
 </html>
